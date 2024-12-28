@@ -69,7 +69,7 @@ const App: Component = () => {
     });
   };
 
-  tg.MainButton.onClick(() => createChart)
+  tg.MainButton.onClick(createChart)
 
   return (
     <div class={styles.main}>
