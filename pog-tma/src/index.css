@@ -15,6 +15,9 @@ code {
 }
 
 button {
-  touch-action: manipulation;
-  cursor: pointer;
+  width: 100px;
+  border-radius: 5px;
+  padding: 10px;
+  border: 0;
+  background-color: lightgray;
 }

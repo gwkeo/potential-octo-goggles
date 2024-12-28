@@ -6,10 +6,10 @@
   gap: 4px;
 }
 
-.appButton {
-  width: 100px;
-  border-radius: 5px;
-  padding: 10px;
-  border: 0;
-  background-color: lightgray;
+.buttons {
+  display: flex;
+  flex-direction: row;
+  justify-self: center;
+  align-items: center;
+  gap: 1rem;
 }
