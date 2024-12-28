@@ -12,11 +12,9 @@
   padding: 10px;
   border: 0;
   background-color: lightgray;
-  transition: 0.1s;
 }
 
 .appButton:hover {
   background-color: gray;
   color: white;
-  transition: 0.1s;
 }
