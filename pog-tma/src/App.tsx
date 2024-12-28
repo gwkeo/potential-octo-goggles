@@ -4,22 +4,41 @@ import { createSignal } from 'solid-js';
 import styles from './App.module.css'
 
 const App: Component = () => {
-  const [count, setCount] = createSignal(0);
+  const [formula, setFormula] = createSignal<string>("")
+  
   const tg = window.Telegram.WebApp
-
   tg.MainButton.setText("Закрыть")
   tg.MainButton.show()
   tg.MainButton.onClick(() => {tg.close()})
-  
+
+  const canvas = document.querySelector("#idChart") as HTMLElement;
+  if (!canvas) console.log("canvas not found")
+
+  // const ctx = canvas.getContext("2d")
+
+
   return (
-    <div class={styles.appModule}>
-      <h1>POG: {count()}</h1>
-      <div class={styles.buttons}>
-        <button class={styles.appButton} onPointerDown={() => setCount(count() + 1)}>Addddd</button>
-        <button class={styles.appButton} onPointerDown={() => setCount(0)}>Refreshhh</button>
+    <div class={styles.main}>
+      <div class={styles.appModule}>
+        <input 
+          class={styles.functionInput} 
+          type="text" 
+          placeholder='Пример, y=x^2'
+          onInput={(e) => setFormula(e.currentTarget.value)}
+        />
+        <button onTouchStart={() => alert(`формула: ${formula()}`)}>Подтвердить</button>
       </div>
     </div>
   );
 };
+
+// function showPopup(tg : any) {
+//   tg.showPopup({
+//     title: 'Формула введена неверно',
+//     message: 'Исправьте ошибки в формуле',
+//     buttons: [
+//       {id: 'ok', type: 'default', text: 'Ок'},
+//     ]}, () => {});
+// }
 
 export default App;
