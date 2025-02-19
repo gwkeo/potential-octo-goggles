@@ -1,15 +1,16 @@
-import type { Component } from 'solid-js';
-
-import { createSignal, For } from 'solid-js';
+import { Component } from 'solid-js';
+import { createSignal } from 'solid-js';
 import { InputTeX } from './components/InputTeX/InputTeX';
 
-import styles from './App.module.css'
-
 const App: Component = () => {
+  const [input, setInput] = createSignal("")
+
   return (
     <div>
-      <InputTeX/>
-      <button>Отправить</button>
+
+      <InputTeX value={input()} onInput={setInput}/>
+
+      <button onclick={() => {console.log(JSON.stringify({input: input()}))}}>Отправить</button>
     </div>
   );
 };
