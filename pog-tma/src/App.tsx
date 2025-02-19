@@ -1,4 +1,5 @@
 import type { Component } from 'solid-js';
+
 import { createSignal, For } from 'solid-js';
 import { InputTeX } from './components/InputTeX/InputTeX';
 

@@ -21,6 +21,7 @@ declare global {
           close: () => void;
           ready: () => void;
           onEvent: (event: string, callback: () => void) => void;
+          showPopup: (params : any, callback: () => void) => void;
         };
       };
     }
