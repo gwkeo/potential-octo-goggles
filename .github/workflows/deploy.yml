@@ -1,0 +1,31 @@
+name: Deploy SolidJS to Github Pages
+
+on:
+  push:
+    branches:
+      - web-app
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Клонируем репозиторий
+        uses: actions/checkout@v4
+
+      - name: Устанавливаем Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+        
+      - name: Устанавливаем зависимости
+        run: npm install
+      
+      - name: Собираем проект
+        run: npm run build
+      
+      - name: Деплоим на Github Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages
+          folder: dist
+          clean: true
