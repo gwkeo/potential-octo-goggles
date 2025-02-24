@@ -1,12 +1,9 @@
 -- +goose Up
 -- +goose StatementBegin
-CREATE TABLE assignments IF NOT EXISTS (
-    id INTEGER NOT NULL,
-    user_id INTEGER
+CREATE TABLE assignments (
+    id INTEGER NOT NULL PRIMARY KEY,
+    user_id INTEGER,
+    formula VARCHAR(256),
+    grade FLOAT
 );
--- +goose StatementEnd
-
--- +goose Down
--- +goose StatementBegin
-DROP TABLE assignments;
 -- +goose StatementEnd
