@@ -54,10 +54,6 @@ export const Task : Component = () => {
                     <div class="tex" innerHTML={handleTex(element)}></div>
                 </div>
             }</For>
-            <div class="footer-bar">
-                <button class="cancel" onclick={() => {console.log("return back")}}>back</button>
-                <button class="submit" onclick={() => {handleSubmit()}}>Submit</button>
-            </div>
 
         </div>
     )
