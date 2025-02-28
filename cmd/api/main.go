@@ -1,10 +1,7 @@
 package main
 
-import "github.com/joho/godotenv"
+import "github.com/gwkeo/potential-octo-goggles/env"
 
 func main() {
-	err := godotenv.Load()
-	if err != nil {
-
-	}
+	env := env.MustLoad()
 }

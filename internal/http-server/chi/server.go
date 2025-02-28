@@ -3,9 +3,11 @@ package chi
 import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
-	"github.com/gwkeo/potential-octo-goggles/internal/http-server/chi/middleware/logger_mw"
+	"github.com/gwkeo/potential-octo-goggles/internal/http-server/chi/handlers"
+	"github.com/gwkeo/potential-octo-goggles/internal/http-server/chi/middlewares/logger_mw"
 	"github.com/gwkeo/potential-octo-goggles/internal/models"
 	"github.com/gwkeo/potential-octo-goggles/internal/utils/logger"
+	"net/http"
 )
 
 type storage interface {
@@ -30,7 +32,10 @@ func New(storage storage, logger *logger.Logger) *Server {
 func (s *Server) Start() error {
 
 	s.setRoutes()
-	return nil
+	s.router.Method("GET", "/api", handlers.Handler(handlers.NewApi))
+
+	if err := http.ListenAndServe(":", s.router); err != nil {
+	}
 }
 
 func (s *Server) setRoutes() {

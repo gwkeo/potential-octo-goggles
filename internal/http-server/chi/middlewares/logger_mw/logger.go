@@ -10,9 +10,9 @@ import (
 func New(log *logger.Logger) func(next http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		component := map[string]interface{}{
-			"component": "middleware/logger",
+			"component": "middlewares/logger",
 		}
-		(*log).Info("logger middleware enabled", component)
+		(*log).Info("logger middlewares enabled", component)
 
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			request := map[string]interface{}{
