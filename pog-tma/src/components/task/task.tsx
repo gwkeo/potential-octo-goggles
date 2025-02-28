@@ -12,7 +12,10 @@ export const Task : Component = () => {
                 .onClick(handleSubmit)
                 .show()
             
-            app.BackButton.onClick(() => app.showAlert("back button pressed"))
+            app.SecondaryButton
+                .setText("back")
+                .onClick(() => {app.showAlert("Back button pressed")})
+                .show()
         }
     })
 
