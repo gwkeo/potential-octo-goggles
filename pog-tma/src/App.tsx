@@ -1,16 +1,17 @@
 import { Component } from 'solid-js';
 import { createSignal } from 'solid-js';
-import { InputTeX } from './components/InputTeX/InputTeX';
+import { Task } from './components/task/task';
 
 const App: Component = () => {
   const [input, setInput] = createSignal("")
 
+  let clicked = () => {
+    console.log(JSON.stringify({input: input()}))
+  }
+
   return (
     <div>
-
-      <InputTeX value={input()} onInput={setInput}/>
-
-      <button onclick={() => {console.log(JSON.stringify({input: input()}))}}>Отправить</button>
+      <Task/>
     </div>
   );
 };

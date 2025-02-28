@@ -1,0 +1,7 @@
+.env
+.idea/.gitignore
+.idea/dataSources.xml
+.idea/modules.xml
+.idea/potential-octo-goggles.iml
+.idea/sqldialects.xml
+.idea/vcs.xml

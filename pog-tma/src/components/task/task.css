@@ -1,0 +1,37 @@
+:root {
+    --default-width: 400px;
+}
+
+.content {
+    display: block;
+    margin: 10px;
+    padding: 10px;
+}
+
+.tex {
+    height: 20px;
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: var(--light-background-color);
+    color: var(--default-text-color);
+}
+
+.footer-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    border-radius: 10px 10px 0 0;
+    padding: 10px;
+    background-color: var(--accent-text-color);
+    position: sticky;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+}
+
+.submit {
+    background-color: var(--accent-background-color);
+}
