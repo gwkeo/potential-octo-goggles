@@ -1,64 +1,54 @@
 package postgres
 
 import (
-	"database/sql"
+	"context"
 	"errors"
+	"fmt"
 	"github.com/gwkeo/potential-octo-goggles/internal/models"
+	"github.com/jackc/pgx/v5"
 )
 
 type Storage struct {
-	db *sql.DB
+	db *pgx.Conn
 }
 
-func New(path string) (*Storage, error) {
-	db, err := sql.Open("postgres", path)
+func New(ctx context.Context, host, port, name, user, password string) (*Storage, error) {
+	connStr := fmt.Sprintf("postgres://%v:%v@%v:%v/%v", user, password, host, port, name)
+	db, err := pgx.Connect(ctx, connStr)
 	if err != nil {
-		return nil, errors.New("unable to connect to postgres")
+		return nil, errors.New("unable to connect to postgres" + err.Error())
 	}
 
 	return &Storage{db: db}, nil
 }
 
-func (s *Storage) Create(assignment *models.Assignment) (int64, error) {
-	stmt, err := s.db.Prepare("INSERT INTO assignments (user_id, formula, grade) VALUES (?, ?, ?)")
+func (s *Storage) Create(ctx context.Context, assignments *models.Assignment) (int64, error) {
+	var id int64
+	err := s.db.QueryRow(ctx, "INSERT INTO assignments (user_id, formula, grade) VALUES ($1, $2, $3)", assignments.UserID, assignments.Formula, assignments.Grade).Scan(&id)
 	if err != nil {
-		return -1, err
-	}
-
-	result, err := stmt.Exec(assignment.UserID, assignment.Formula, assignment.Grade)
-	if err != nil {
-		return -1, err
-	}
-
-	id, err := result.LastInsertId()
-	if err != nil {
-		return -1, err
+		return 0, err
 	}
 
 	return id, nil
 }
 
-func (s *Storage) UserAssignments(userID int64) ([]models.Assignment, error) {
-	stmt, err := s.db.Prepare("SELECT * FROM assignments WHERE user_id = ?")
+func (s *Storage) UserAssignments(ctx context.Context, id int64) ([]models.Assignment, error) {
+	rows, err := s.db.Query(ctx, "SELECT FROM assignments WHERE id = $1", id)
 	if err != nil {
 		return nil, err
 	}
 
-	rows, err := stmt.Query(userID)
-	if err != nil {
-		return nil, err
-	}
-
-	defer rows.Close()
-
-	var result []models.Assignment
+	var assignments []models.Assignment
 	for rows.Next() {
-		var assignment models.Assignment
-		if err = rows.Scan(&assignment.ID, &assignment.UserID, &assignment.Formula, &assignment.Grade); err != nil {
-			return nil, err
+		var a models.Assignment
+		if err = rows.Scan(a.ID, a.UserID, a.Formula, a.Grade); err != nil {
+			return assignments, err
 		}
-		result = append(result, assignment)
+		assignments = append(assignments, a)
+	}
+	if err = rows.Err(); err != nil {
+		return assignments, err
 	}
 
-	return result, nil
+	return assignments, nil
 }
