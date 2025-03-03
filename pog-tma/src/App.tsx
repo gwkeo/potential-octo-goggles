@@ -16,7 +16,7 @@ const App: Component = () => {
   })
 
   return (
-    <Router>
+    <Router base='/potential-octo-goggles'>
       <Route path="/" component={Home}></Route>
       <Route path="/profile" component={Profile}></Route>
       <Route path="/task" component={Task}></Route>
