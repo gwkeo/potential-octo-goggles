@@ -1,8 +1,0 @@
-:root {
-    --default-width: 400px;
-}
-
-.main {
-    display: flex;
-    width: var(--default-width);
-}

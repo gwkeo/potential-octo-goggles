@@ -1,10 +1,9 @@
 /* @refresh reload */
 import { render } from 'solid-js/web';
-
-import './index.css';
 import App from './App';
+import "./index.css"
 
-const root = document.getElementById('root');
+const root = document.getElementById('app');
 
 if (import.meta.env.DEV && !(root instanceof HTMLElement)) {
   throw new Error(
@@ -12,4 +11,10 @@ if (import.meta.env.DEV && !(root instanceof HTMLElement)) {
   );
 }
 
-render(() => <App />, root!);
+if (window.Telegram && window.Telegram.WebApp) {
+  
+}
+
+render(() => (
+  <App></App>
+), root!);

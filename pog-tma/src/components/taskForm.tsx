@@ -1,22 +1,14 @@
 import { renderToString } from "katex";
 import { Component, createSignal, For, onMount } from "solid-js";
+import { useNavigate } from "@solidjs/router";
 
-import "./task.css"
+import "./taskForm.css"
 
-export const Task : Component = () => {
+const TaskForm : Component = () => {
+    const navigate = useNavigate()
+    
     onMount(() => {
-        if (window?.Telegram?.WebApp) {
-            let app = window.Telegram.WebApp
-            app.MainButton
-                .setText("Отправить")
-                .onClick(handleSubmit)
-                .show()
-            
-            app.SecondaryButton
-                .setText("back")
-                .onClick(() => {app.showAlert("Back button pressed")})
-                .show()
-        }
+        const app = window.Telegram.WebApp
     })
 
     const fields = ['name', 
@@ -61,3 +53,5 @@ export const Task : Component = () => {
         </div>
     )
 }
+
+export default TaskForm

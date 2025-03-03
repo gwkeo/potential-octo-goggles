@@ -1,27 +1,27 @@
-import { Component, createSignal } from 'solid-js';
-import { Dynamic } from 'solid-js/web';
-import { Task } from './components/task/task';
-import { Profile } from './components/profile/profile';
+import { Component, onMount } from 'solid-js';
+import { Router, Route } from '@solidjs/router'
 
 import "./App.module.css"
+import Profile from './pages/profile';
+import Task from './pages/task';
+import NotFound from './pages/notFound'
+import Home from './pages/home'
 
 const App: Component = () => {
 
-  const sections = {
-    "profile": Profile,
-    "task": Task
-  }
 
-  const [section, setSection] = createSignal<string>("task")
+  onMount(() => {
+    const app = window.Telegram.WebApp
+    app.requestFullscreen()
+  })
 
   return (
-    <div class="main">
-      <nav>
-          <button onclick={() => setSection("profile")}>Профиль</button>
-          <button onclick={() => setSection("task")}>Задачи</button>
-      </nav>
-      <Dynamic component={sections[section()]}></Dynamic>
-    </div>
+    <Router>
+      <Route path="/" component={Home}></Route>
+      <Route path="/profile" component={Profile}></Route>
+      <Route path="/task" component={Task}></Route>
+      <Route path="*404" component={NotFound}></Route>
+    </Router>
   );
 };
 
