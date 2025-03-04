@@ -82,63 +82,60 @@ def valid_point(ans, key):
         return False
     
 def valid_answer(ans, key):
+    r_dict = {"ok": False, "msg": ""}
     if not (valid_name(ans["name"], key["name"])):
-        return "Неверное название"
-    if not (valid_formula(ans["formula"], key["formula"])):
-        return "Неверная формула"
-    if not (valid_num_value(ans["semiaxis_a"], key["semiaxis_a"]) and
+        r_dict.update({"msg": "Неверное название"})
+    elif not (valid_formula(ans["formula"], key["formula"])):
+        r_dict.update({"msg": "Неверная формула"})
+    elif not (valid_num_value(ans["semiaxis_a"], key["semiaxis_a"]) and
             valid_num_value(ans["semiaxis_b"], key["semiaxis_b"])):
-        return "Неверные полуоси"
-    if not (valid_point(ans["center"], key["center"])):
+        r_dict.update({"msg": "Неверные полуоси"})
+    elif not (valid_point(ans["center"], key["center"])):
         if key["name"] == "Точка":
-            return "Неверные координаты точки"
+            r_dict.update({"msg": "Неверные координаты точки"})
         elif key["name"] == "Парабола":
-            return "Неверная вершина"
+            r_dict.update({"msg": "Неверная вершина"})
         else:
-            return "Неверный центр кривой"
-    if key["name"] == "Парабола":
+            r_dict.update({"msg": "Неверный центр кривой"})
+    elif key["name"] == "Парабола":
         if not (valid_num_value(ans["eccenter"], key["eccenter"])):
-            return "Неверный эксцентриситет"
-        if not (valid_num_value(ans["parameter"], key["parameter"])):
-            return "Неверный параметр"
-        if not ((valid_point(ans["focus1"], key["focus1"]) and
+            r_dict.update({"msg": "Неверный эксцентриситет"})
+        elif not (valid_num_value(ans["parameter"], key["parameter"])):
+            r_dict.update({"msg": "Неверный параметр"})
+        elif not ((valid_point(ans["focus1"], key["focus1"]) and
                 valid_point(ans["focus2"], key["focus2"])) or
                 (valid_point(ans["focus1"], key["focus2"]) and
                 valid_point(ans["focus2"], key["focus1"]))):
-            return "Неверный фокус"
-        if not ((valid_direct(ans["direct1"], key["direct1"]) and
+            r_dict.update({"msg": "Неверный фокус"})
+        elif not ((valid_direct(ans["direct1"], key["direct1"]) and
                 valid_direct(ans["direct2"], key["direct2"])) or
                 (valid_direct(ans["direct1"], key["direct2"]) and
                 valid_direct(ans["direct2"], key["direct1"]))):
-            return "Неверная директриса"
-        if ans["asymptote1"] != "" and ans["asymptote2"] != "":
-            return "Асимптот не должно быть"
+            r_dict.update({"msg": "Неверная директриса"})
+        elif ans["asymptote1"] != "" and ans["asymptote2"] != "":
+            r_dict.update({"msg": "Асимптот не должно быть"})
         else:
-            return "Правильно"
+            r_dict.update({"msg": "Правильно", "ok": True})
     else:
         if not ((valid_point(ans["asymptote1"], key["asymptote1"]) and
                 valid_point(ans["asymptote2"], key["asymptote2"])) or
                 (valid_point(ans["asymptote1"], key["asymptote2"]) and
                 valid_point(ans["asymptote2"], key["asymptote1"]))):
-            return "Неверные асимптоты"
-        if not ((valid_point(ans["focus1"], key["focus1"]) and
+            r_dict.update({"msg": "Неверные асимптоты"})
+        elif not ((valid_point(ans["focus1"], key["focus1"]) and
                 valid_point(ans["focus2"], key["focus2"])) or
                 (valid_point(ans["focus1"], key["focus2"]) and
                 valid_point(ans["focus2"], key["focus1"]))):
-            return "Неверные фокусы"
-        if not (valid_num_value(ans["eccenter"], key["eccenter"])):
-            return "Неверный эксцентриситет"
-        if not (valid_num_value(ans["parameter"], key["parameter"])):
-            return "Неверный параметр"
-        if not ((valid_direct(ans["direct1"], key["direct1"]) and
+            r_dict.update({"msg": "Неверные фокусы"})
+        elif not (valid_num_value(ans["eccenter"], key["eccenter"])):
+            r_dict.update({"msg": "Неверный эксцентриситет"})
+        elif not (valid_num_value(ans["parameter"], key["parameter"])):
+            r_dict.update({"msg": "Неверный параметр"})
+        elif not ((valid_direct(ans["direct1"], key["direct1"]) and
                 valid_direct(ans["direct2"], key["direct2"])) or
                 (valid_direct(ans["direct1"], key["direct2"]) and
                 valid_direct(ans["direct2"], key["direct1"]))):
-            return "Неверная директриса"
-        return "Правильно"
-    
-key_dict = json.loads(impost(input()))
-with open("data.json", "r") as file:
-    ans_dict = json.load(file)
-    print(ans_dict)
-print(valid_answer(ans_dict, key_dict))
+            r_dict.update({"msg": "Неверная директриса"})
+        else:
+            r_dict.update({"msg": "Правильно", "ok": True})
+    return r_dict
