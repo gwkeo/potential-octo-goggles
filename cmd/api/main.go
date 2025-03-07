@@ -2,14 +2,14 @@ package main
 
 import (
 	"context"
-	"github.com/gwkeo/potential-octo-goggles/env"
+	"github.com/gwkeo/potential-octo-goggles/environment"
 	"github.com/gwkeo/potential-octo-goggles/internal/http-server/chi-server"
 	"github.com/gwkeo/potential-octo-goggles/internal/storage/assignments/postgres"
 	"go.uber.org/zap"
 )
 
 func main() {
-	env := env.MustLoad()
+	env := environment.MustLoad()
 
 	ctx := context.TODO()
 

@@ -19,6 +19,6 @@ func NewReadService(reader reader) *AssignmentsService {
 	}
 }
 
-func (s *AssignmentsService) ReadUserAssignments(ctx context.Context, userID int64) ([]models.Assignment, error) {
+func (s *AssignmentsService) Read(ctx context.Context, userID int64) ([]models.Assignment, error) {
 	return s.reader.UserAssignments(ctx, userID)
 }

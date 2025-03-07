@@ -23,17 +23,17 @@ func New(ctx context.Context, host, port, name, user, password string) (*Storage
 }
 
 func (s *Storage) Create(ctx context.Context, assignments *models.Assignment) (int64, error) {
-	var id int64
-	err := s.db.QueryRow(ctx, "INSERT INTO assignments (user_id, formula, grade) VALUES ($1, $2, $3)", assignments.UserID, assignments.Formula, assignments.Grade).Scan(&id)
+	id := 0
+	err := s.db.QueryRow(ctx, "INSERT INTO assignments (user_id, formula, grade) VALUES ($1, $2, $3) RETURNING id", assignments.UserID, assignments.Formula, assignments.Grade).Scan(&id)
 	if err != nil {
 		return 0, err
 	}
 
-	return id, nil
+	return int64(id), nil
 }
 
-func (s *Storage) UserAssignments(ctx context.Context, id int64) ([]models.Assignment, error) {
-	rows, err := s.db.Query(ctx, "SELECT FROM assignments WHERE id = $1", id)
+func (s *Storage) UserAssignments(ctx context.Context, userID int64) ([]models.Assignment, error) {
+	rows, err := s.db.Query(ctx, "SELECT * FROM assignments WHERE user_id = $1", userID)
 	if err != nil {
 		return nil, err
 	}
@@ -41,7 +41,7 @@ func (s *Storage) UserAssignments(ctx context.Context, id int64) ([]models.Assig
 	var assignments []models.Assignment
 	for rows.Next() {
 		var a models.Assignment
-		if err = rows.Scan(a.ID, a.UserID, a.Formula, a.Grade); err != nil {
+		if err = rows.Scan(&a.ID, &a.UserID, &a.Formula, &a.Grade); err != nil {
 			return assignments, err
 		}
 		assignments = append(assignments, a)
