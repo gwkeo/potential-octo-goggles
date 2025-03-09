@@ -4,14 +4,17 @@ from sympy import symbols, solve, N
 import json
 
 def evaluate_line(equation, x1, x2):
-    x, y = symbols("x y")
-    equation = equation.replace(" ", "")
-    loc = equation.find(',')
+    x = symbols("x")
+    return set([solve(equation.subs(x, x1))[0], solve(equation.subs(x, x2))[0]])
+
+def divide_lines(strings):
+    strings = strings.replace(" ", "")
+    loc = strings.find(",")
     if loc == -1:
-        loc = equation.find(';')
-    equation1 = latex2sympy(equation[:loc])
-    equation2 = latex2sympy(equation[loc + 1:])
-    return set([solve(equation1.subs(x, x1))[0], solve(equation1.subs(x, x2))[0]])
+        loc_a = strings.find(";")
+    s1 = latex2sympy(strings[:loc])
+    s2 = latex2sympy(strings[loc + 1:])
+    return s1, s2
 
 def valid_name(ans, key):
     ans = ans.replace(" ", "")
@@ -32,9 +35,13 @@ def valid_formula(ans, key):
             if '**' in ans or '^' in ans:
                 return False
             else:
-                x0 = my_dict["center"]["x"]
-                y0 = my_dict["center"]["y"]
-                return evaluate_line(ans, x0, 1412) == evaluate_line(key, x0, 1412)
+                ans_divided = divide_lines(ans)
+                key_divided = divide_lines(key)
+                a = set((evaluate_line(ans_divided[0], 0, 1412), evaluate_line(ans_divided[1], 0, 1412)))
+                b = set((evaluate_line(key_divided[0], 0, 1412), evaluate_line(key_divided[1], 0, 1412)))
+                print(a)
+                print(b)
+                return a == b
     except:
         return False
     
@@ -54,10 +61,8 @@ def valid_asymptote(ans, key):
         if '**' in ans or '^' in ans:
             return False
         else:
-            x0 = my_dict["center"]["x"]
-            y0 = my_dict["center"]["y"]
             try:
-                return evaluate_line(ans, x0, 1412) == evaluate_line(key, x0, 1412)
+                return evaluate_line(ans, 0, 1412) == evaluate_line(key, 0, 1412)
             except:
                 return False
 
@@ -67,8 +72,10 @@ def valid_direct(ans, key):
     elif ans[0] != key[0]:
         return False
     try:
-        ans = ans[2:]
-        key = key[3:]
+        loc_a = ans.find("=") + 1
+        loc_k = key.find("=") + 1
+        ans = ans[loc_a:]
+        key = key[loc_k:]
         return N(latex2sympy(ans)) == N(key)
     except:
         return False
