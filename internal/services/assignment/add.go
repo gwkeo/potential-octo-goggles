@@ -2,6 +2,7 @@ package assignment
 
 import (
 	"context"
+	"errors"
 	"github.com/gwkeo/potential-octo-goggles/internal/models"
 )
 
@@ -18,5 +19,9 @@ func NewAddService(creator creator) *AddService {
 }
 
 func (s *AddService) Add(ctx context.Context, assignment *models.Assignment) (int64, error) {
+	if assignment.UserID < 0 {
+		return 0, errors.New("UserID cannot be negative")
+	}
+
 	return s.creator.Create(ctx, assignment)
 }

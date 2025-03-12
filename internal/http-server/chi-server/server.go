@@ -8,6 +8,7 @@ import (
 	"github.com/gwkeo/potential-octo-goggles/internal/http-server/chi-server/mw"
 	"github.com/gwkeo/potential-octo-goggles/internal/models"
 	"github.com/gwkeo/potential-octo-goggles/internal/services/assignment"
+	"github.com/gwkeo/potential-octo-goggles/internal/services/math"
 	"go.uber.org/zap"
 	"net/http"
 	"time"
@@ -38,7 +39,11 @@ func (s *Server) Start() error {
 	reader := assignment.NewReadService(s.storage)
 	assignmentsController := handler.NewController(adder, reader)
 
-	s.setRoutes(assignmentsController)
+	generator := math.NewGenerator("/generate")
+	validator := math.NewValidator("/validate")
+	tasksController := handler.NewTasksController(generator, validator)
+
+	s.setRoutes(assignmentsController, tasksController)
 
 	if err := http.ListenAndServe("localhost:8080", s.router); err != nil {
 		return err
@@ -46,7 +51,7 @@ func (s *Server) Start() error {
 	return nil
 }
 
-func (s *Server) setRoutes(controller *handler.AssignmentsController) {
+func (s *Server) setRoutes(assignmentsController *handler.AssignmentsController, tasksController *handler.TasksController) {
 	s.router.Use(middleware.RequestID)
 	s.router.Use(mw.New(s.logger))
 	s.router.Use(middleware.Recoverer)
@@ -55,7 +60,12 @@ func (s *Server) setRoutes(controller *handler.AssignmentsController) {
 	s.router.Use(middleware.Timeout(60 * time.Second))
 
 	s.router.Route("/assignments", func(r chi.Router) {
-		r.Get("/", controller.HandleGet)
-		r.Post("/", controller.HandlePost)
+		r.Get("/", assignmentsController.HandleGet)
+		r.Post("/", assignmentsController.HandlePost)
+	})
+
+	s.router.Route("/math", func(r chi.Router) {
+		r.Get("/task", tasksController.HandleGet)
+		r.Post("/task", tasksController.HandlePost)
 	})
 }

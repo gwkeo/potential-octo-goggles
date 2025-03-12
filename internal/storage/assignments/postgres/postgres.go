@@ -8,6 +8,7 @@ import (
 	"github.com/jackc/pgx/v5"
 )
 
+// Storage служит для подключения к БД
 type Storage struct {
 	db *pgx.Conn
 }
@@ -22,6 +23,7 @@ func New(ctx context.Context, host, port, name, user, password string) (*Storage
 	return &Storage{db: db}, nil
 }
 
+// Create создает новый assignment
 func (s *Storage) Create(ctx context.Context, assignments *models.Assignment) (int64, error) {
 	id := 0
 	err := s.db.QueryRow(ctx, "INSERT INTO assignments (user_id, formula, grade) VALUES ($1, $2, $3) RETURNING id", assignments.UserID, assignments.Formula, assignments.Grade).Scan(&id)
@@ -38,17 +40,17 @@ func (s *Storage) UserAssignments(ctx context.Context, userID int64) ([]models.A
 		return nil, err
 	}
 
-	var assignments []models.Assignment
+	var result []models.Assignment
 	for rows.Next() {
 		var a models.Assignment
 		if err = rows.Scan(&a.ID, &a.UserID, &a.Formula, &a.Grade); err != nil {
-			return assignments, err
+			return result, err
 		}
-		assignments = append(assignments, a)
+		result = append(result, a)
 	}
 	if err = rows.Err(); err != nil {
-		return assignments, err
+		return result, err
 	}
 
-	return assignments, nil
+	return result, nil
 }
