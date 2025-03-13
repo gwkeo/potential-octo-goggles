@@ -42,6 +42,7 @@ def generate():
         y0 = randint(1, 5)*(-1)**randint(1,2)
         return no_ones(b**2) + 'x^2' + sgn(-2*x0*b**2) + 'x' + sgn(a**2) + 'y^2' + sgn(-2*y0*a**2) + 'y' + sgn_last(b**2*x0**2+a**2*y0**2-a**2*b**2) + '=0'
     if k == 3: # гипербола a - действительная
+
         a = randint(1, 9)
         b = randint(1, 9)
         x0 = randint(1, 5)

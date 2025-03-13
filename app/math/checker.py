@@ -72,10 +72,12 @@ def valid_direct(ans, key):
     elif ans[0] != key[0]:
         return False
     try:
+
         loc_a = ans.find("=") + 1
         loc_k = key.find("=") + 1
         ans = ans[loc_a:]
         key = key[loc_k:]
+
         return N(latex2sympy(ans)) == N(key)
     except:
         return False

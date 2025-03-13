@@ -44,7 +44,6 @@ def coef(text, vr): # поиск коэффициентов одночленов
 
                 
 def impost(s):
-    dict_main = {"task": f"{s}", "name": "", "formula": "", "focus1": {"x": "", "y": ""},
                  "focus2": {"x": "", "y": ""}, "eccenter": "", "parameter": "",
                  "direct1": "", "direct2": "", "semiaxis_a": "", "semiaxis_b": "",
                  "asymptote1": "", "asymptote2": "", "center": {"x": "", "y": ""}}
