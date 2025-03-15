@@ -44,9 +44,7 @@ def coef(text, vr): # поиск коэффициентов одночленов
 
                 
 def impost(s):
-    lst_main = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-    # lst_main = [name, F1, F2, E, p, d1, d2, ax0, by0, OSx ,OSy]
-    dict_main = {"name": "", "formula": "", "focus1": {"x": "", "y": ""},
+    dict_main = {"task": f"{s}", "name": "", "formula": "", "focus1": {"x": "", "y": ""},
                  "focus2": {"x": "", "y": ""}, "eccenter": "", "parameter": "",
                  "direct1": "", "direct2": "", "semiaxis_a": "", "semiaxis_b": "",
                  "asymptote1": "", "asymptote2": "", "center": {"x": "", "y": ""}}
@@ -180,11 +178,4 @@ def impost(s):
         dict_main.update({"parameter": f"{abs(p)}", "center": {"x": f"{x0}", "y": f"{y0}"}}) # конечная информация для всех парабол
 
 
-    return json.dumps(dict_main, indent=4, ensure_ascii=False)
-
-if __name__ == '__main__':
-    RESULT = impost(input())
-    print(RESULT)
-    with open("data.json", "w") as file:
-        file.write(RESULT)
-        # json.dump(RESULT, file, indent=4, ensure_ascii=False)
+    return dict_main
