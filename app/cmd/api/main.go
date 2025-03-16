@@ -2,9 +2,9 @@ package main
 
 import (
 	"context"
-	"github.com/gwkeo/potential-octo-goggles/environment"
-	"github.com/gwkeo/potential-octo-goggles/internal/http-server/chi-server"
-	"github.com/gwkeo/potential-octo-goggles/internal/storage/assignments/postgres"
+	"github.com/gwkeo/potential-octo-goggles/app/environment"
+	"github.com/gwkeo/potential-octo-goggles/app/internal/http-server/chi-server"
+	"github.com/gwkeo/potential-octo-goggles/app/internal/storage/assignments/postgres"
 	"go.uber.org/zap"
 )
 

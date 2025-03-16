@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/gwkeo/potential-octo-goggles/internal/models"
+	"github.com/gwkeo/potential-octo-goggles/app/internal/models"
 	"github.com/jackc/pgx/v5"
 )
 

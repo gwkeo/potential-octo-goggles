@@ -3,7 +3,7 @@ package assignment
 import (
 	"context"
 	"errors"
-	"github.com/gwkeo/potential-octo-goggles/internal/models"
+	"github.com/gwkeo/potential-octo-goggles/app/internal/models"
 )
 
 type reader interface {

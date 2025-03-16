@@ -4,11 +4,11 @@ import (
 	"context"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
-	"github.com/gwkeo/potential-octo-goggles/internal/http-server/chi-server/handler"
-	"github.com/gwkeo/potential-octo-goggles/internal/http-server/chi-server/mw"
-	"github.com/gwkeo/potential-octo-goggles/internal/models"
-	"github.com/gwkeo/potential-octo-goggles/internal/services/assignment"
-	"github.com/gwkeo/potential-octo-goggles/internal/services/math"
+	handler2 "github.com/gwkeo/potential-octo-goggles/app/internal/http-server/chi-server/handler"
+	"github.com/gwkeo/potential-octo-goggles/app/internal/http-server/chi-server/mw"
+	"github.com/gwkeo/potential-octo-goggles/app/internal/models"
+	assignment2 "github.com/gwkeo/potential-octo-goggles/app/internal/services/assignment"
+	math2 "github.com/gwkeo/potential-octo-goggles/app/internal/services/math"
 	"go.uber.org/zap"
 	"net/http"
 	"time"
@@ -35,13 +35,13 @@ func New(storage storage, logger *zap.Logger) *Server {
 
 func (s *Server) Start() error {
 
-	adder := assignment.NewAddService(s.storage)
-	reader := assignment.NewReadService(s.storage)
-	assignmentsController := handler.NewController(adder, reader)
+	adder := assignment2.NewAddService(s.storage)
+	reader := assignment2.NewReadService(s.storage)
+	assignmentsController := handler2.NewController(adder, reader)
 
-	generator := math.NewGenerator("/generate")
-	validator := math.NewValidator("/validate")
-	tasksController := handler.NewTasksController(generator, validator)
+	generator := math2.NewGenerator("/generate")
+	validator := math2.NewValidator("/validate")
+	tasksController := handler2.NewTasksController(generator, validator)
 
 	s.setRoutes(assignmentsController, tasksController)
 
@@ -51,7 +51,7 @@ func (s *Server) Start() error {
 	return nil
 }
 
-func (s *Server) setRoutes(assignmentsController *handler.AssignmentsController, tasksController *handler.TasksController) {
+func (s *Server) setRoutes(assignmentsController *handler2.AssignmentsController, tasksController *handler2.TasksController) {
 	s.router.Use(middleware.RequestID)
 	s.router.Use(mw.New(s.logger))
 	s.router.Use(middleware.Recoverer)

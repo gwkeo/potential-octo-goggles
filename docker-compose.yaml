@@ -2,7 +2,7 @@ services:
   postgres:
     image: postgres:latest
     env_file:
-      - .env
+      - app/.env
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -11,3 +11,24 @@ services:
       - "5432:5432"
     volumes:
       - .:/docker-entrypoint-init_db.d
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+
+  webapp:
+    build:
+      context: ./pog-tma
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - "./pog-tma:/app"
+      - "/app/node_modules"
+    environment:
+      - NODE_ENV=development

@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
-	"github.com/gwkeo/potential-octo-goggles/internal/models"
+	models2 "github.com/gwkeo/potential-octo-goggles/app/internal/models"
 	"io"
 	"net/http"
 )
@@ -21,7 +21,7 @@ func NewValidator(baseUrl string) *Validator {
 	}
 }
 
-func (v *Validator) Validate(ctx context.Context, solution *models.Solution) (*models.ValidationResult, error) {
+func (v *Validator) Validate(ctx context.Context, solution *models2.Solution) (*models2.ValidationResult, error) {
 	body, err := json.Marshal(solution)
 	if err != nil {
 		return nil, err
@@ -44,7 +44,7 @@ func (v *Validator) Validate(ctx context.Context, solution *models.Solution) (*m
 
 	defer response.Body.Close()
 
-	var validationResult *models.ValidationResult
+	var validationResult *models2.ValidationResult
 	if err = json.Unmarshal(responseBody, validationResult); err != nil {
 		return nil, err
 	}

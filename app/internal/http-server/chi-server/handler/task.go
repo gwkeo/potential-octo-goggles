@@ -3,17 +3,17 @@ package handler
 import (
 	"context"
 	"encoding/json"
-	"github.com/gwkeo/potential-octo-goggles/internal/models"
+	models2 "github.com/gwkeo/potential-octo-goggles/app/internal/models"
 	"io"
 	"net/http"
 )
 
 type Generator interface {
-	Generate(ctx context.Context) (*models.Task, error)
+	Generate(ctx context.Context) (*models2.Task, error)
 }
 
 type Validator interface {
-	Validate(ctx context.Context, solution *models.Solution) (*models.ValidationResult, error)
+	Validate(ctx context.Context, solution *models2.Solution) (*models2.ValidationResult, error)
 }
 
 type TasksController struct {
@@ -57,7 +57,7 @@ func (c *TasksController) HandlePost(w http.ResponseWriter, r *http.Request) {
 	}
 	defer r.Body.Close()
 
-	var solution *models.Solution
+	var solution *models2.Solution
 	if err = json.Unmarshal(requestBody, solution); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
