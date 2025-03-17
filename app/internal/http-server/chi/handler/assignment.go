@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/gwkeo/potential-octo-goggles/app/internal/models"
+	"github.com/gwkeo/potential-octo-goggles/app/internal/utils/message"
 	"io"
 	"net/http"
 	"strconv"
@@ -35,19 +36,20 @@ func (c *AssignmentsController) HandlePost(w http.ResponseWriter, r *http.Reques
 
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
-		http.Error(w, "error parsing response body", http.StatusInternalServerError)
+		http.Error(w, message.Wrap("error parsing response body", err), http.StatusInternalServerError)
 		return
 	}
 
 	var a models.Assignment
 	err = json.Unmarshal(body, &a)
 	if err != nil {
-		http.Error(w, "error unmarshalling response body"+err.Error(), http.StatusBadRequest)
+		http.Error(w, message.Wrap("error unmarshalling response body", err), http.StatusBadRequest)
 		return
 	}
 
 	id, err := c.adder.Add(ctx, &a)
 	if err != nil {
+		http.Error(w, message.Wrap("error adding assignment to db", err), http.StatusInternalServerError)
 		return
 	}
 
@@ -60,13 +62,13 @@ func (c *AssignmentsController) HandleGet(w http.ResponseWriter, r *http.Request
 
 	rawId := r.URL.Query().Get("user_id")
 	if rawId == "" {
-		http.Error(w, "user_id not specified", http.StatusBadRequest)
+		http.Error(w, message.Wrap("user_id not specified", nil), http.StatusBadRequest)
 		return
 	}
 
 	id, err := strconv.ParseInt(rawId, 10, 64)
 	if err != nil {
-		http.Error(w, "unable to parse int", http.StatusBadRequest)
+		http.Error(w, message.Wrap("unable to parse int", err), http.StatusBadRequest)
 		return
 	}
 
@@ -74,17 +76,17 @@ func (c *AssignmentsController) HandleGet(w http.ResponseWriter, r *http.Request
 	if err != nil {
 		fmt.Println(assignments, err.Error())
 		if len(assignments) == 0 {
-			http.Error(w, "Not found", http.StatusNotFound)
+			http.Error(w, message.Wrap("not found", err), http.StatusNotFound)
 			return
 		}
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		http.Error(w, message.Wrap("error reading assignments from db: ", err), http.StatusInternalServerError)
 		return
 	}
 
 	var response []byte
 	response, err = json.Marshal(assignments)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		http.Error(w, message.Wrap("error while marshaling json response", err), http.StatusInternalServerError)
 		return
 	}
 
