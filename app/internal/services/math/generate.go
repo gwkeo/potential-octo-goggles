@@ -3,7 +3,7 @@ package math
 import (
 	"context"
 	"encoding/json"
-	"github.com/gwkeo/potential-octo-goggles/internal/models"
+	"github.com/gwkeo/potential-octo-goggles/app/internal/models"
 	"io"
 	"net/http"
 )

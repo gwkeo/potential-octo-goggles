@@ -1,14 +1,14 @@
-package chi_server
+package chi
 
 import (
 	"context"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
-	"github.com/gwkeo/potential-octo-goggles/internal/http-server/chi-server/handler"
-	"github.com/gwkeo/potential-octo-goggles/internal/http-server/chi-server/mw"
-	"github.com/gwkeo/potential-octo-goggles/internal/models"
-	"github.com/gwkeo/potential-octo-goggles/internal/services/assignment"
-	"github.com/gwkeo/potential-octo-goggles/internal/services/math"
+	"github.com/gwkeo/potential-octo-goggles/app/internal/http-server/chi/handler"
+	"github.com/gwkeo/potential-octo-goggles/app/internal/http-server/chi/mw"
+	"github.com/gwkeo/potential-octo-goggles/app/internal/models"
+	"github.com/gwkeo/potential-octo-goggles/app/internal/services/assignment"
+	"github.com/gwkeo/potential-octo-goggles/app/internal/services/math"
 	"go.uber.org/zap"
 	"net/http"
 	"time"
@@ -45,7 +45,7 @@ func (s *Server) Start() error {
 
 	s.setRoutes(assignmentsController, tasksController)
 
-	if err := http.ListenAndServe("localhost:8080", s.router); err != nil {
+	if err := http.ListenAndServe("0.0.0.0:8080", s.router); err != nil {
 		return err
 	}
 	return nil
