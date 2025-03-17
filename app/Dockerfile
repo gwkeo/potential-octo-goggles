@@ -1,19 +1,20 @@
-FROM golang:latest AS builder
+FROM golang:1.19-alpine AS builder
 
 WORKDIR /app
 
+COPY go.mod go.sum ./
+RUN go mod tidy
 COPY . .
 
-RUN go mod download
-
-RUN go build -o server ./cmd/api
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o server ./cmd/api
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o migrate ./cmd/migrate
 
 FROM alpine:latest
 
-WORKDIR /root/
+WORKDIR /app
 
 COPY --from=builder /app/server .
-
-EXPOSE 8080
+COPY --from=builder /app/migrate .
+COPY --from=builder /app/migrations ./migrations
 
 CMD ["./server"]
