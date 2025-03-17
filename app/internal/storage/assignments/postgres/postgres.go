@@ -3,7 +3,6 @@ package postgres
 import (
 	"context"
 	"errors"
-	"fmt"
 	"github.com/gwkeo/potential-octo-goggles/app/internal/models"
 	"github.com/jackc/pgx/v5"
 )
@@ -13,9 +12,8 @@ type Storage struct {
 	db *pgx.Conn
 }
 
-func New(ctx context.Context, host, port, name, user, password string) (*Storage, error) {
-	connStr := fmt.Sprintf("postgres://%v:%v@%v:%v/%v", user, password, host, port, name)
-	db, err := pgx.Connect(ctx, connStr)
+func New(ctx context.Context, connectionString string) (*Storage, error) {
+	db, err := pgx.Connect(ctx, connectionString)
 	if err != nil {
 		return nil, errors.New("unable to connect to postgres" + err.Error())
 	}
