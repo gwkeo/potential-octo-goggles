@@ -2,19 +2,16 @@ from typing import Optional
 from pydantic import BaseModel
 
 
-class Formula(BaseModel):
-    def __init__(self, formula: str):
-        self.formula = formula
-
+class Task(BaseModel):
+    task: str
 
 class Point(BaseModel):
     x: Optional[str] = None
     y: Optional[str] = None
 
-
 class Solution(BaseModel):
     name: str
-    formula: str
+    task: str
     focus1: Optional[Point] = None
     focus2: Optional[Point] = None
     eccenter: Optional[str] = None
@@ -26,7 +23,6 @@ class Solution(BaseModel):
     assymptotle1: Optional[str] = None
     assymptotle2: Optional[str] = None
     center: Optional[Point] = None
-
 
 class Request(BaseModel):
     user_id: int

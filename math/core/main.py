@@ -1,7 +1,6 @@
 from automaton import generate
 from resultasitis import impost
 from checker import valid_answer
-from random import randint
 
 task = generate()
 # задание. отправляем пользователю

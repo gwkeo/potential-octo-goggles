@@ -1,4 +1,4 @@
 .idea/*
-app/venv/*
-app/__pycache__
+math/venv/*
+math/__pycache__
 .env
