@@ -1,11 +1,11 @@
 from resultasitis import impost, coef
 from latex2sympy2_extended import latex2sympy
-from sympy import symbols, solve, N
+from sympy import symbols, solve, N, sympify
 from classes import *
 
 def evaluate_line(equation, x1, x2):
     x = symbols("x")
-    return set([solve(equation.subs(x, x1))[0], solve(equation.subs(x, x2))[0]])
+    return frozenset([solve(equation.subs(x, x1))[0], solve(equation.subs(x, x2))[0]])
 
 def divide_lines(strings):
     strings = strings.replace(" ", "")
@@ -25,18 +25,16 @@ def valid_name(ans, key):
 
 def valid_formula(ans, key):
     try:
-        if ans.count(',') + ans.count(';') == 0: # то есть 1 уравнение
+        if (ans.count(',') + ans.count(';')) == 0: # то есть 1 уравнение
             return ans == key
-        if ans.count(',') + ans.count(';') == 1: # параллельные или пересекающиеся
+        if (ans.count(',') + ans.count(';')) == 1: # параллельные или пересекающиеся
             if '**' in ans or '^' in ans:
                 return False
             else:
                 ans_divided = divide_lines(ans)
                 key_divided = divide_lines(key)
-                a = set((evaluate_line(ans_divided[0], 0, 1412), evaluate_line(ans_divided[1], 0, 1412)))
-                b = set((evaluate_line(key_divided[0], 0, 1412), evaluate_line(key_divided[1], 0, 1412)))
-                print(a)
-                print(b)
+                a = set([evaluate_line(ans_divided[0], 0, 1412),(evaluate_line(ans_divided[1], 0, 1412))])
+                b = set([evaluate_line(key_divided[0], 0, 1412),(evaluate_line(key_divided[1], 0, 1412))])
                 return a == b
     except:
         return False
@@ -58,7 +56,7 @@ def valid_asymptote(ans, key):
             return False
         else:
             try:
-                return evaluate_line(ans, 0, 1412) == evaluate_line(key, 0, 1412)
+                return evaluate_line(latex2sympy(ans), 0, 1412) == evaluate_line(latex2sympy(key), 0, 1412)
             except:
                 return False
 
@@ -110,10 +108,10 @@ def valid_answer(ans: Solution, key: Solution):
     elif not (valid_num_value(ans.semiaxis_a, key.semiaxis_a) and
             valid_num_value(ans.semiaxis_b, key.semiaxis_b)):
         verd.msg = "Неверные полуоси"
-    elif not ((valid_point(ans.asymptote1, key.asymptote1) and
-                valid_point(ans.asymptote2, key.asymptote2)) or
-                (valid_point(ans.asymptote1, key.asymptote2) and
-                valid_point(ans.asymptote2, key.asymptote1))):
+    elif not ((valid_asymptote(ans.asymptote1, key.asymptote1) and
+                valid_asymptote(ans.asymptote2, key.asymptote2)) or
+                (valid_asymptote(ans.asymptote1, key.asymptote2) and
+                valid_asymptote(ans.asymptote2, key.asymptote1))):
         verd.msg = "Неверные асимптоты"
     elif not (valid_point(ans.center, key.center)):
         if key.name == "Парабола":
