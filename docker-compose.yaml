@@ -27,6 +27,17 @@ services:
       CONNECTION_STRING: "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:5432/${POSTGRES_DB}"
     ports:
     - "8080:8080"
+  webapp:
+    build:
+      context: ./pog-tma
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - "./pog-tma:/src"
+      - "/src/node_modules"
+    environment:
+      - NODE_ENV=development
 
 volumes:
   pg_data:
