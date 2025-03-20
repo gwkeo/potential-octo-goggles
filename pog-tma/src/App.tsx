@@ -4,8 +4,6 @@ import { Router, Route } from '@solidjs/router'
 import "./App.module.css"
 import Profile from './pages/profile';
 import Task from './pages/task';
-import NotFound from './pages/notFound'
-import Home from './pages/home'
 
 const App: Component = () => {
 
@@ -17,10 +15,9 @@ const App: Component = () => {
 
   return (
     <Router base='/potential-octo-goggles'>
-      <Route path="/" component={Home}></Route>
-      <Route path="/profile" component={Profile}></Route>
+      <Route path="/" component={Profile}></Route>
+      <Route path="*404" component={Profile}></Route>
       <Route path="/task" component={Task}></Route>
-      <Route path="*404" component={NotFound}></Route>
     </Router>
   );
 };
