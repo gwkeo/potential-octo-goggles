@@ -2,6 +2,9 @@ package chi
 
 import (
 	"context"
+	"net/http"
+	"time"
+
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/gwkeo/potential-octo-goggles/app/internal/http-server/chi/handler"
@@ -10,8 +13,6 @@ import (
 	"github.com/gwkeo/potential-octo-goggles/app/internal/services/assignment"
 	"github.com/gwkeo/potential-octo-goggles/app/internal/services/math"
 	"go.uber.org/zap"
-	"net/http"
-	"time"
 )
 
 type storage interface {
@@ -23,13 +24,15 @@ type Server struct {
 	router  chi.Router
 	storage storage
 	logger  *zap.Logger
+	mathURL string
 }
 
-func New(storage storage, logger *zap.Logger) *Server {
+func New(storage storage, logger *zap.Logger, mathURL string) *Server {
 	return &Server{
 		router:  chi.NewRouter(),
 		storage: storage,
 		logger:  logger,
+		mathURL: mathURL,
 	}
 }
 
@@ -39,8 +42,8 @@ func (s *Server) Start() error {
 	reader := assignment.NewReadService(s.storage)
 	assignmentsController := handler.NewController(adder, reader)
 
-	generator := math.NewGenerator("/generate")
-	validator := math.NewValidator("/validate")
+	generator := math.NewGenerator(s.mathURL)
+	validator := math.NewValidator(s.mathURL)
 	tasksController := handler.NewTasksController(generator, validator)
 
 	s.setRoutes(assignmentsController, tasksController)
