@@ -56,9 +56,10 @@ func (s *Server) Start() error {
 
 func (s *Server) setRoutes(assignmentsController *handler.AssignmentsController, tasksController *handler.TasksController) {
 	s.router.Use(middleware.RequestID)
-	s.router.Use(mw.New(s.logger))
+	s.router.Use(mw.NewLoggerMiddleWare(s.logger))
 	s.router.Use(middleware.Recoverer)
 	s.router.Use(middleware.URLFormat)
+	s.router.Use(mw.NewCORSMiddleWare())
 
 	s.router.Use(middleware.Timeout(60 * time.Second))
 
