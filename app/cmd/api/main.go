@@ -19,6 +19,11 @@ func main() {
 		log.Fatal("CONNECTION_STRING not specified")
 	}
 
+	mathURL := os.Getenv("MATH_SERVICE_URL")
+	if mathURL == "" {
+		log.Fatal("MATH_SERVICE_URL not specified")
+	}
+
 	ctx := context.TODO()
 
 	assignmentsRepo, err := postgres.New(ctx, connectionString)
@@ -26,7 +31,7 @@ func main() {
 		log.Fatal(err.Error())
 	}
 
-	server := chi.New(assignmentsRepo, log)
+	server := chi.New(assignmentsRepo, log, mathURL)
 	if err = server.Start(); err != nil {
 		log.Fatal(err.Error())
 	}

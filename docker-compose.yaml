@@ -32,6 +32,7 @@ services:
     env_file: .env
     environment:
       CONNECTION_STRING: "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:5432/${POSTGRES_DB}"
+      MATH_SERVICE_URL: "http://math:8000"
     ports:
     - "8080:8080"
   webapp:
@@ -41,10 +42,12 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - "./pog-tma:/src"
-      - "/src/node_modules"
+      - "./pog-tma:/app"
+      - "/app/node_modules"
     environment:
       - NODE_ENV=development
+      - CHOKIDAR_USEPOLLING=true
+    command: ["npm", "run", "dev"]
 
 volumes:
   pg_data:

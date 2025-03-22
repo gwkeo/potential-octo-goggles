@@ -3,9 +3,10 @@ package math
 import (
 	"context"
 	"encoding/json"
-	"github.com/gwkeo/potential-octo-goggles/app/internal/models"
 	"io"
 	"net/http"
+
+	"github.com/gwkeo/potential-octo-goggles/app/internal/models"
 )
 
 type Generator struct {
@@ -15,14 +16,14 @@ type Generator struct {
 
 func NewGenerator(baseUrl string) *Generator {
 	return &Generator{
-		baseUrl: baseUrl,
+		baseUrl: baseUrl + "/generate",
 		c:       &http.Client{},
 	}
 }
 
 func (g *Generator) Generate(ctx context.Context) (*models.Task, error) {
 
-	request, err := http.NewRequestWithContext(ctx, http.MethodGet, "/generate", nil)
+	request, err := http.NewRequestWithContext(ctx, http.MethodGet, g.baseUrl, nil)
 	if err != nil {
 		return nil, err
 	}

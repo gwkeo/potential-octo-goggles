@@ -4,9 +4,10 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
-	models2 "github.com/gwkeo/potential-octo-goggles/app/internal/models"
 	"io"
 	"net/http"
+
+	models2 "github.com/gwkeo/potential-octo-goggles/app/internal/models"
 )
 
 type Validator struct {
@@ -16,7 +17,7 @@ type Validator struct {
 
 func NewValidator(baseUrl string) *Validator {
 	return &Validator{
-		baseUrl: baseUrl,
+		baseUrl: baseUrl + "/validate",
 		c:       &http.Client{},
 	}
 }
@@ -27,7 +28,7 @@ func (v *Validator) Validate(ctx context.Context, solution *models2.Solution) (*
 		return nil, err
 	}
 
-	request, err := http.NewRequestWithContext(ctx, http.MethodPost, "/validate", bytes.NewBuffer(body))
+	request, err := http.NewRequestWithContext(ctx, http.MethodPost, v.baseUrl, bytes.NewBuffer(body))
 	if err != nil {
 		return nil, err
 	}

@@ -3,10 +3,11 @@ package handler
 import (
 	"context"
 	"encoding/json"
-	"github.com/gwkeo/potential-octo-goggles/app/internal/models"
-	"github.com/gwkeo/potential-octo-goggles/app/internal/utils/message"
 	"io"
 	"net/http"
+
+	"github.com/gwkeo/potential-octo-goggles/app/internal/models"
+	"github.com/gwkeo/potential-octo-goggles/app/internal/utils/message"
 )
 
 type Generator interface {
