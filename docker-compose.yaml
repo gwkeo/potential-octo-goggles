@@ -42,10 +42,12 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - "./pog-tma:/src"
-      - "/src/node_modules"
+      - "./pog-tma:/app"
+      - "/app/node_modules"
     environment:
       - NODE_ENV=development
+      - CHOKIDAR_USEPOLLING=true
+    command: ["npm", "run", "dev"]
 
 volumes:
   pg_data:
