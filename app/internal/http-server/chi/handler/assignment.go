@@ -75,7 +75,6 @@ func (c *AssignmentsController) HandleGet(w http.ResponseWriter, r *http.Request
 
 	assignments, err := c.reader.Read(ctx, id)
 	if err != nil {
-		fmt.Println(assignments, err.Error())
 		if len(assignments) == 0 {
 			http.Error(w, message.Wrap("not found", err), http.StatusNotFound)
 			return
