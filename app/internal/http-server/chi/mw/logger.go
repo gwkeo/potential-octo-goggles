@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-func New(log *zap.Logger) func(next http.Handler) http.Handler {
+func NewLoggerMiddleWare(log *zap.Logger) func(next http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		defer log.Sync()
 		sugar := log.Sugar()
