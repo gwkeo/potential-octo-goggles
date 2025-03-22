@@ -2,8 +2,8 @@ import { Component, onMount } from 'solid-js';
 import { Router, Route } from '@solidjs/router'
 
 import "./App.module.css"
-import Profile from './pages/profile';
-import Task from './pages/task';
+import ProfilePage from './pages/profilePage';
+import TaskPage from './pages/taskPage';
 
 const App: Component = () => {
 
@@ -15,9 +15,9 @@ const App: Component = () => {
 
   return (
     <Router base='/potential-octo-goggles'>
-      <Route path="/" component={Profile}></Route>
-      <Route path="*404" component={Profile}></Route>
-      <Route path="/task" component={Task}></Route>
+      <Route path="/" component={ProfilePage}></Route>
+      <Route path="*404" component={ProfilePage}></Route>
+      <Route path="/task" component={TaskPage}></Route>
     </Router>
   );
 };

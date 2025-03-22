@@ -1,15 +1,11 @@
 import { renderToString } from "katex";
-import { Component, createSignal, For, onMount } from "solid-js";
+import { Component, createSignal, For} from "solid-js";
 import { useNavigate } from "@solidjs/router";
 
 import "./taskForm.css"
 
 const TaskForm : Component = () => {
     const navigate = useNavigate()
-    
-    onMount(() => {
-        const app = window.Telegram.WebApp
-    })
 
     const fields = ['name', 
         'formula', 
@@ -24,6 +20,7 @@ const TaskForm : Component = () => {
         'assymptotle1',
         'assymptotle2',
         'center' ]
+    
     const [inputs, setInputs] = createSignal<{ [key: string] : string }>()
 
     const handleInput = (key: string, value: string) => {
@@ -40,7 +37,6 @@ const TaskForm : Component = () => {
 
     return (
         <div>
-            
             <For each={[...fields]}>
                 {(element, i) => 
                 <div class="content">
