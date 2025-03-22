@@ -7,8 +7,18 @@ import "./taskForm.css"
 const TaskForm : Component = () => {
     const navigate = useNavigate()
 
-    const fields = ['name', 
-        'formula', 
+    const params = {
+        "name" : {
+            "text" : "Название кривой",
+            "options" : ["Парабола", "Гипербола", "Эллипс"]
+        },
+        "focus" : {
+            "text": "Фокус 1"
+        }
+    }
+
+    const fields = [
+        'formula',
         'focus1', 
         'focus2', 
         'eccenter', 
@@ -37,11 +47,15 @@ const TaskForm : Component = () => {
 
     return (
         <div>
+            <select name="" id="">
+                <For each={params.name.options}>
+                    {(elem) => <option>{elem}</option>}
+                </For>
+            </select>
             <For each={[...fields]}>
                 {(element, i) => 
                 <div class="content">
-                    <div>{element}</div>
-                    <input placeholder="Пример, x^2" type="text" onInput={(e) => handleInput(element, (e.currentTarget as HTMLInputElement).value)}/>
+                    <input placeholder={element} type="text" onInput={(e) => handleInput(element, (e.currentTarget as HTMLInputElement).value)}/>
                     <div class="tex" innerHTML={handleTex(element)}></div>
                 </div>
             }</For>
