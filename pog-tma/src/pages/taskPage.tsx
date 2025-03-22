@@ -12,11 +12,14 @@ const TaskPage : Component = () => {
     return (
         <div>
             <h1>Тестирование</h1>
-            {task.loading && <h2>Загрузка</h2>}
-            {task.error && <h2>Ошибка</h2>}
-            {task() && <h2>{task()?.task}</h2>}
+            {task.loading && <h3>Загрузка</h3>}
+            {task.error && <h3>Ошибка</h3>}
+            {task() && <h3>{task()?.task}</h3>}
             <TaskForm/>
-            <button onclick={() => navigate("/")}>Вернуться назад</button>
+            <div class="buttons">
+                <button onclick={() => navigate("/")}>Вернуться назад</button>
+                <button>Отправить</button>
+            </div>
         </div>
     )
 }

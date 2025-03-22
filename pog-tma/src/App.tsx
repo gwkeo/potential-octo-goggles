@@ -7,7 +7,6 @@ import TaskPage from './pages/taskPage';
 
 const App: Component = () => {
 
-
   onMount(() => {
     const app = window.Telegram.WebApp
     app.requestFullscreen()

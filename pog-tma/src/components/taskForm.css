@@ -1,6 +1,15 @@
+.content {
+    margin: 10px;
+}
+
+input {
+    padding: 10px;
+    width: 500px;
+}
+
 .tex {
     height: 20px;
-    width: 300px;
+    width: 500px;
     margin-top: 10px;
     padding: 10px;
     background-color: #696969;
