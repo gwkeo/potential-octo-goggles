@@ -7,11 +7,8 @@ import "./taskForm.css"
 const TaskForm : Component = () => {
     const navigate = useNavigate()
 
+    const curve_names = ["Парабола", "Эллипс"]
     const params = {
-        "name" : {
-            "text" : "Название кривой",
-            "options" : ["Парабола", "Гипербола", "Эллипс"]
-        },
         "focus_1" : {
             "text": "Фокус 1"
         },
@@ -72,7 +69,7 @@ const TaskForm : Component = () => {
     return (
         <div>
             <select name="" id="">
-                <For each={params.name.options}>
+                <For each={curve_names}>
                     {(elem) => <option>{elem}</option>}
                 </For>
             </select>
