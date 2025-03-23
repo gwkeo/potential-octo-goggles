@@ -12,8 +12,32 @@ const TaskForm : Component = () => {
             "text" : "Название кривой",
             "options" : ["Парабола", "Гипербола", "Эллипс"]
         },
-        "focus" : {
+        "focus_1" : {
             "text": "Фокус 1"
+        },
+        "focus_2" : {
+            "text": "Фокус 2"
+        },
+        "EC_center" : {
+            "text": "Эксцентриситет"
+        },
+        "parameter" : {
+            "text": "Параметр"
+        },
+        "direct_1" : {
+            "text": "Прямая 1"
+        },
+        "direct_2" : {
+            "text": "Прямая 2"
+        },
+        "semiaxis_a" : {
+            "text": "Большая полуось"
+        },
+        "semiaxis_b" : {
+            "text": "Малая полуось"
+        },
+        "center" : {
+            "text": "Центр"
         }
     }
 
@@ -52,13 +76,13 @@ const TaskForm : Component = () => {
                     {(elem) => <option>{elem}</option>}
                 </For>
             </select>
-            <For each={[...fields]}>
-                {(element, i) => 
-                <div class="content">
-                    <input placeholder={element} type="text" onInput={(e) => handleInput(element, (e.currentTarget as HTMLInputElement).value)}/>
-                    <div class="tex" innerHTML={handleTex(element)}></div>
+            <For each={Object.entries(params)}>
+                {([, value]) => <div class="content">
+                    <input placeholder={value.text} type="text" onInput={(e) => handleInput(value.text, (e.currentTarget as HTMLInputElement).value)}/>
+                    <div class="tex" innerHTML={handleTex(value.text)}></div>
                 </div>
-            }</For>
+            }
+            </For>
 
         </div>
     )
