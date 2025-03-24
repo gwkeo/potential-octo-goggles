@@ -33,7 +33,7 @@ func (s *Storage) Create(ctx context.Context, assignments *models.Assignment) (i
 }
 
 func (s *Storage) UserAssignments(ctx context.Context, userID int64) ([]models.Assignment, error) {
-	rows, err := s.db.Query(ctx, "SELECT * FROM assignments WHERE user_id = $1", userID)
+	rows, err := s.db.Query(ctx, "SELECT * FROM assignments WHERE user_id = $1  ORDER BY time_end", userID)
 	if err != nil {
 		return nil, err
 	}
@@ -41,7 +41,7 @@ func (s *Storage) UserAssignments(ctx context.Context, userID int64) ([]models.A
 	var result []models.Assignment
 	for rows.Next() {
 		var a models.Assignment
-		if err = rows.Scan(&a.ID, &a.UserID, &a.Formula, &a.Grade); err != nil {
+		if err = rows.Scan(&a.ID, &a.UserID, &a.Formula, &a.Grade, &a.Attempts, &a.TimeStart, &a.TimeEnd); err != nil {
 			return result, err
 		}
 		result = append(result, a)
