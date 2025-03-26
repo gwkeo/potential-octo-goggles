@@ -1,8 +1,9 @@
 from fastapi import FastAPI, Body
-from models import Task, Request, Solution
+from core.models.task import Task
+from core.models.solution import Request, Solution
 from core import automaton
-from core import resultasitis
- 
+from core import solver
+
 app = FastAPI()
  
 @app.get("/generate", response_model=Task)
@@ -14,5 +15,5 @@ async def get_formula():
 async def check_solution(request: Request = Body(...)):
     solution : Solution = request.solution
     task : str = solution.task
-    key = resultasitis.impost(task)
+    key = solver.impost(task)
     return {"focus1": solution.focus1}
