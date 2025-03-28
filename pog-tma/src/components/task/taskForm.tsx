@@ -3,6 +3,8 @@ import { Component, createSignal, For} from "solid-js";
 import { useNavigate } from "@solidjs/router";
 
 import "./taskForm.css"
+import { TeX } from "../TeX/TeX";
+import { InputTeX } from "../inputTeX/inputTeX";
 
 const TaskForm : Component = () => {
     const navigate = useNavigate()
@@ -75,8 +77,7 @@ const TaskForm : Component = () => {
             </select>
             <For each={Object.entries(params)}>
                 {([, value]) => <div class="content">
-                    <input placeholder={value.text} type="text" onInput={(e) => handleInput(value.text, (e.currentTarget as HTMLInputElement).value)}/>
-                    <div class="tex" innerHTML={handleTex(value.text)}></div>
+                    <InputTeX placeholder={value.text} setter={handleInput}></InputTeX>
                 </div>
             }
             </For>

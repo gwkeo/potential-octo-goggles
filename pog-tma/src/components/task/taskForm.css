@@ -1,5 +1,6 @@
 .content {
     margin: 10px;
+    width: 100%;
 }
 
 input {
@@ -10,21 +11,13 @@ input {
     font-size: large;
     color: white;
     padding: 5px;
-    width: 500px;
+    width: 80vw;
     transition-duration: 250ms;
 }
 
 input:focus {
     transition-duration: 250ms;
     border-bottom: 1px solid #4b50b0
-}
-
-.tex {
-    height: 20px;
-    width: 500px;
-    margin-top: 10px;
-    padding: 10px;
-    background-color: #696969;
 }
 
 select {

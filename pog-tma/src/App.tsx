@@ -2,8 +2,8 @@ import { Component, onMount } from 'solid-js';
 import { Router, Route } from '@solidjs/router'
 
 import "./App.module.css"
-import ProfilePage from './pages/profilePage';
-import TaskPage from './pages/taskPage';
+import ProfilePage from './pages/profile/profilePage';
+import TaskPage from './pages/task/taskPage';
 
 const App: Component = () => {
 

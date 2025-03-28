@@ -3,6 +3,7 @@
   --default-text-color: #EEEEEE;
   --lighter-background-color: #565656;
   --default-font-size: 20px;
+  --default-width: 100%;
 }
 
 body {

@@ -1,7 +1,7 @@
 import { Component, createResource, For } from "solid-js";
 
 import "./profileInfo.css"
-import { fetchAssignmentsByUserID } from "../services/assignments";
+import { fetchAssignmentsByUserID } from "../../services/assignments";
 
 const ProfileInfo : Component = () => {
     
@@ -15,7 +15,7 @@ const ProfileInfo : Component = () => {
     const [data] = createResource(() => userInfo.id, fetchAssignmentsByUserID)
 
     return (
-        <div>
+        <div class="profile">   
             <div class="profile-container">
                 <img src={userInfo.photo_url} />
                 <div>{userInfo.first_name}</div>

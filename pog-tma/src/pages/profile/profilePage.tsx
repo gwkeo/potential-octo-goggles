@@ -1,6 +1,7 @@
 import {Component} from 'solid-js'
 import { useNavigate } from '@solidjs/router'
-import ProfileInfo from '../components/profileInfo'
+import ProfileInfo from '../../components/profile/profileInfo'
+
 
 const ProfilePage: Component = () => {
     const navigate = useNavigate()
