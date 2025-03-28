@@ -1,5 +1,6 @@
 import { Component, createSignal } from "solid-js";
 import { TeX } from "../TeX/TeX";
+import "./inputTeX.css"
 
 export const InputTeX: Component<{ placeholder: string, setter(key: string, value: string): void}> = (props) => {
     const [input, setInput] = createSignal("")
