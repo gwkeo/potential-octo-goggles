@@ -81,6 +81,7 @@ const TaskForm : Component = () => {
                 </div>
             }
             </For>
+            <button onclick={() => console.log(JSON.stringify(inputs()))}>Отправить</button>
 
         </div>
     )

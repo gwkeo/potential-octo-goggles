@@ -1,5 +1,5 @@
 import { renderToString } from "katex";
-import { Component } from "solid-js";
+import { Component, Setter } from "solid-js";
 import "./TeX.css"
 
 function handleTex(str : string) {
@@ -7,7 +7,9 @@ function handleTex(str : string) {
 }
 
 export const TeX: Component<{ str: string }> = (props) => {
+    
+    
     return <>
-        <div class="tex" innerHTML={renderToString(props.str)}></div>
+        <div class="tex" innerHTML={renderToString(props.str, {throwOnError: false})}></div>
     </>
 }
