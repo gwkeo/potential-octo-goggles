@@ -7,7 +7,7 @@ import (
 	"io"
 	"net/http"
 
-	models2 "github.com/gwkeo/potential-octo-goggles/app/internal/models"
+	"github.com/gwkeo/potential-octo-goggles/app/internal/models"
 )
 
 type Validator struct {
@@ -22,7 +22,7 @@ func NewValidator(baseUrl string) *Validator {
 	}
 }
 
-func (v *Validator) Validate(ctx context.Context, solution *models2.Solution) (*models2.ValidationResult, error) {
+func (v *Validator) Validate(ctx context.Context, solution *models.Solution, assignmentID int64) (*models.ValidationResult, error) {
 	body, err := json.Marshal(solution)
 	if err != nil {
 		return nil, err
@@ -45,10 +45,11 @@ func (v *Validator) Validate(ctx context.Context, solution *models2.Solution) (*
 
 	defer response.Body.Close()
 
-	var validationResult *models2.ValidationResult
-	if err = json.Unmarshal(responseBody, validationResult); err != nil {
+	var validationResult *models.ValidationResult
+	if err = json.Unmarshal(responseBody, &validationResult); err != nil {
 		return nil, err
 	}
+	validationResult.AssignmentID = assignmentID
 
 	return validationResult, nil
 }

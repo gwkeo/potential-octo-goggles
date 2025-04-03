@@ -70,6 +70,5 @@ func (s *Server) setRoutes(assignmentsController *handler.AssignmentsController,
 
 	s.router.Route("/math", func(r chi.Router) {
 		r.Get("/task", tasksController.HandleGet)
-		r.Post("/task", tasksController.HandlePost)
 	})
 }
