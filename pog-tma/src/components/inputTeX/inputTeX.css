@@ -7,11 +7,9 @@ input {
     color: white;
     padding: 5px;
     width: 80vw;
-    transition-duration: 250ms;
 }
 
 input:focus {
-    transition-duration: 250ms;
     border-bottom: 1px solid #4b50b0
 }
 
