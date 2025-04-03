@@ -12,7 +12,7 @@ import (
 )
 
 type Validator interface {
-	Validate(ctx context.Context, solution *models.Solution, assignmentID int64) (*models.ValidationResult, error)
+	Validate(ctx context.Context, solution *models.Solution) (*models.ValidationResult, error)
 }
 
 type Adder interface {
@@ -52,19 +52,25 @@ func (c *AssignmentsController) HandlePost(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
+	assignmentResult, err := c.validator.Validate(ctx, &a.Solution)
+	if err != nil {
+		http.Error(w, message.Wrap("error validating solution", err), http.StatusInternalServerError)
+		return
+	}
+
 	id, err := c.adder.Add(ctx, a)
 	if err != nil {
 		http.Error(w, message.Wrap("error adding assignment to db", err), http.StatusInternalServerError)
 		return
 	}
 
-	assignmentResult, err := c.validator.Validate(ctx, &a.Solution, id)
-	if err != nil {
-		http.Error(w, message.Wrap("error validating solution", err), http.StatusInternalServerError)
+	assignmentResponse := &models.AssignmentResponse{
+		AssignmentID: id,
+		OK:           assignmentResult.OK,
+		Message:      assignmentResult.Message,
 	}
-
 	var response []byte
-	response, err = json.Marshal(assignmentResult)
+	response, err = json.Marshal(assignmentResponse)
 	if err != nil {
 		http.Error(w, message.Wrap("error while marshaling json response", err), http.StatusInternalServerError)
 		return

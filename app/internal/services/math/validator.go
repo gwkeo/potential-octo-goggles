@@ -22,7 +22,7 @@ func NewValidator(baseUrl string) *Validator {
 	}
 }
 
-func (v *Validator) Validate(ctx context.Context, solution *models.Solution, assignmentID int64) (*models.ValidationResult, error) {
+func (v *Validator) Validate(ctx context.Context, solution *models.Solution) (*models.ValidationResult, error) {
 	body, err := json.Marshal(solution)
 	if err != nil {
 		return nil, err
@@ -49,7 +49,6 @@ func (v *Validator) Validate(ctx context.Context, solution *models.Solution, ass
 	if err = json.Unmarshal(responseBody, &validationResult); err != nil {
 		return nil, err
 	}
-	validationResult.AssignmentID = assignmentID
 
 	return validationResult, nil
 }
