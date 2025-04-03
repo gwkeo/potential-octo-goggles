@@ -3,7 +3,6 @@ package models
 type Solution struct {
 	Task    string `json:"task"`
 	Name    string `json:"name"`
-	Formula string `json:"formula"`
 	Focus1  struct {
 		X string `json:"x"`
 		Y string `json:"y"`
@@ -24,4 +23,9 @@ type Solution struct {
 		X string `json:"x"`
 		Y string `json:"y"`
 	} `json:"center"`
+}
+
+type Point struct {
+	X string `json:"x"`
+	Y string `json:"y"`
 }

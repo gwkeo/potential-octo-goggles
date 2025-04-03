@@ -1,8 +1,9 @@
 import {Component} from 'solid-js'
 import { useNavigate } from '@solidjs/router'
-import ProfileInfo from '../components/profileInfo'
+import ProfileInfo from '../../components/profile/profileInfo'
 
-const Profile: Component = () => {
+
+const ProfilePage: Component = () => {
     const navigate = useNavigate()
 
     window.Telegram.WebApp.BackButton
@@ -21,4 +22,4 @@ const Profile: Component = () => {
     )
 }
 
-export default Profile
+export default ProfilePage

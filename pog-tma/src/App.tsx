@@ -2,13 +2,10 @@ import { Component, onMount } from 'solid-js';
 import { Router, Route } from '@solidjs/router'
 
 import "./App.module.css"
-import Profile from './pages/profile';
-import Task from './pages/task';
-import NotFound from './pages/notFound'
-import Home from './pages/home'
+import ProfilePage from './pages/profile/profilePage';
+import TaskPage from './pages/task/taskPage';
 
 const App: Component = () => {
-
 
   onMount(() => {
     const app = window.Telegram.WebApp
@@ -17,10 +14,9 @@ const App: Component = () => {
 
   return (
     <Router base='/potential-octo-goggles'>
-      <Route path="/" component={Home}></Route>
-      <Route path="/profile" component={Profile}></Route>
-      <Route path="/task" component={Task}></Route>
-      <Route path="*404" component={NotFound}></Route>
+      <Route path="/" component={ProfilePage}></Route>
+      <Route path="*404" component={ProfilePage}></Route>
+      <Route path="/task" component={TaskPage}></Route>
     </Router>
   );
 };
