@@ -1,0 +1,15 @@
+body {
+    position: relative;
+    top: var(--tg-content-safe-area-inset-top);
+    bottom: var(--tg-content-safe-area-inset-bottom);
+    right: var(--tg-content-safe-area-inset-right);
+    left: var(--tg-content-safe-area-inset-left);
+}
+  
+button {
+    background-color: var(--lighter-background-color);
+    color: var(--default-text-color);
+    font-size: var(--default-font-size);
+    border-radius: calc(var(--default-font-size) / 3);
+    border: 0;
+}

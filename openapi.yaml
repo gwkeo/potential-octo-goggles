@@ -1,0 +1,119 @@
+openapi: 3.0.3
+info:
+  title: DM project api
+  version: 0.0.1
+servers:
+  - url: https://gwkeo.github.io/api
+paths:
+  /generate:
+    get:
+      responses:
+        '200':
+          description: Generation of formula
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+  /check:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Solution'
+      responses:
+        '200':
+          description: checks whether formula is valid or not
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Result'
+
+components:
+  schemas:
+    Task:
+      type: object
+      properties:
+        task:
+          type: string
+
+    Solution:
+      type: object
+      properties:
+        task:
+          type: string
+          example: something
+        name:
+          type: string
+          example:
+            гипербола
+        formula:
+          type: string
+          example: (x-3)^2/16-(y-2)^2/4=-1
+        focus1:
+          type: object
+          properties:
+            x:
+              type: string
+              example: 3
+            y:
+              type: string
+              example: -2*sqrt(5)+2
+        focus2:
+          type: object
+          properties:
+            x:
+              type: string
+              example: 3
+            y:
+              type: string
+              example: -2*sqrt(5)+2
+        eccenter:
+          type: string
+          example: sqrt(5)
+        parameter:
+          type: string
+          example: 8*sqrt(5)/5
+        direct1:
+          type: string
+          example: y=2*sqrt(5)/5+2
+        direct2:
+          type: string
+          example: y=-2*sqrt(5)/5+2
+        semiaxis_a:
+          type: string
+          example: 4
+        semiaxis_b:
+          type: string
+          example: 2
+        assymptotle1:
+          type: string
+          example: 2x-4y+2=0
+        assymptotle2:
+          type: string
+          example: 2x+4y-14=0
+        center:
+          type: object
+          properties:
+            x:
+              type: string
+              example: 3
+            y:
+              type: string
+              example: 2
+    Result:
+      type: object
+      properties:
+        ok:
+          type: boolean
+          example: true
+        content:
+          type: object
+          properties:
+            error:
+              type: string
+            at:
+              type: string
+
+
+              
