@@ -1,35 +1,32 @@
-name: Deploy SolidJS to Github Pages
+name: Deploy project
 
 on:
   push:
     branches:
-      - web-app
+      - main
 
 jobs:
-  build-and-deploy:
+  deploy:
     runs-on: ubuntu-latest
-    steps:
-      - name: Клонируем репозиторий
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
-      - name: Устанавливаем Node.js
-        uses: actions/setup-node@v4
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.3
         with:
-          node-version: 18
-        
-      - name: Устанавливаем зависимости
-        run: npm install
-        working-directory: pog-tma
-      
-      - name: Собираем проект
-        run: npm run build
-        working-directory: pog-tma
-      
-      - name: Деплоим на Github Pages
-        uses: JamesIves/github-pages-deploy-action@v4
-        with:
-          branch: gh-pages
-          folder: pog-tma/dist
-          clean: true
+          host: ${{secrets.SSH_HOST}}
+          username: ${{secrets.SSH_USER}}
+          key: ${{secrets.SSH_PRIVATE_KEY}}
+          script: |
+            cd /home/${{secrets.SSH_USER}}/project
+            echo "Pulling latest changes..."
+            git pull origin main
+
+            echo "Rebuilding and restarting containers..."
+            docker compose down
+            docker compose pull
+            docker compose up -d --build
+
+            echo "Cleaning up old Docker images..."
+            docker system prune -af

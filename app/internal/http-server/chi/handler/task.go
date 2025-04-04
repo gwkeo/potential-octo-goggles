@@ -60,7 +60,7 @@ func (c *TasksController) HandlePost(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 
 	var solution *models.Solution
-	if err = json.Unmarshal(requestBody, solution); err != nil {
+	if err = json.Unmarshal(requestBody, &solution); err != nil {
 		http.Error(w, message.Wrap("error while parsing body", err), http.StatusInternalServerError)
 		return
 	}
@@ -71,7 +71,7 @@ func (c *TasksController) HandlePost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	responseBody, err := json.Marshal(validationResult)
+	responseBody, err := json.Marshal(&validationResult)
 	if err != nil {
 		http.Error(w, message.Wrap("error while marshaling json response", err), http.StatusInternalServerError)
 		return
