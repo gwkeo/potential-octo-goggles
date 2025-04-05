@@ -1,5 +1,5 @@
 import { Assignment } from "../models/assignment";
-import { TaskFields } from "../models/taskFields";
+import { Solution } from "../models/taskFields";
 import { API_BASE_URL } from "../utils/config";
 
 export async function fetchAssignmentsByUserID(userID: number) : Promise<Assignment[]> {

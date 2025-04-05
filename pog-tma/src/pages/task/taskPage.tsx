@@ -1,19 +1,18 @@
-import { Component, createResource, For, Task} from "solid-js";
+import { Component, createResource, For, createSignal, onMount} from "solid-js";
 import { useNavigate } from "@solidjs/router";
 import { createStore } from "solid-js/store";
 import { fetchTask } from "../../services/tasks";
 import { InputTeX } from "../../components/inputTeX/inputTeX";
 import { TeX } from "../../components/TeX/TeX";
-import { sendAssignment } from "../../services/assignments";
 
 import "./taskPage.css"
-import { TaskFields } from "../../models/taskFields";
+import { Solution } from "../../models/taskFields";
+import { sendAssignment } from "../../services/assignments";
+import { Assignment } from "../../models/assignment";
 
 const TaskPage : Component = () => {
     const navigate = useNavigate()
-
     const curveNames = ['Эллипс', 'Парабола', 'Гипербола']
-
     const fields = [
         {"name": "task", "placeholder": "Каноническое уравнение"},
         {"name": "focus1.point", "placeholder": "Фокус 1"},
@@ -29,21 +28,45 @@ const TaskPage : Component = () => {
         {"name": "center.point", "placeholder": "Центр"}
     ]
     
+    const [attempts, setAttempts] = createSignal(0)
+    const [startingDate, setStartingDate] = createSignal(Date.now())
+    const [inputs, setInputs] = createStore({} as Solution)
+    const [assignment, setAssignment] = createStore({} as Assignment)
     const [task] = createResource(fetchTask)
-    const [inputs, setInputs] = createStore({} as TaskFields)
-
+    const [result] = createResource(() => assignment, sendAssignment)
+    
+    onMount(() => {
+        setStartingDate(() => Date.now())
+    })
+    
     const handleCoordinateInput = (field: string, e: Event, type: string) => {
         const target = e.target as HTMLInputElement
         field = field.split('.')[0]
         if (type === 'x') {
             setInputs(field, (point: object) => ({...point, x: target.value}))
-
+            
         } else {
             setInputs(field, (point: object) => ({...point, y: target.value}))
-
+            
         }
     }
-
+    
+    const handleSubmit = () => {
+        setAttempts(() => attempts() + 1)
+        const app = window.Telegram.WebApp.initDataUnsafe
+        const solution = inputs
+        setAssignment({
+            ID: 0, UserID: 
+            app.user?.id, 
+            formula: task()!.task,
+            solution: solution,
+            grade: 0,
+            attempts: attempts(),
+            time_start: new Date(startingDate()),
+            time_end: new Date(Date.now()),
+        })
+    }
+    
     return (
         <div>
             <h1>Тестирование</h1>
@@ -74,7 +97,13 @@ const TaskPage : Component = () => {
             </For>
             <div class="buttons">
                 <button onclick={() => navigate("/")}>Вернуться назад</button>
-                <button ontouchstart={() => console.log(JSON.stringify(inputs))}>Отправить</button>
+                <button ontouchstart={handleSubmit}>Отправить</button>
+            </div>
+
+            <div class="output">
+                {result.loading && <></>}
+                {result.error && <div>Ошибка {result.error}</div>}
+                {result()}
             </div>
         </div>
     )
