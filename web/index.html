@@ -3,17 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Telegram User Info</title>
+  <title>POG</title>
   <link rel="stylesheet" href="src/css/style.css">
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
   <div id="app">
-    <h1>Информация о пользователе</h1>
-    <div class="user-info"></div>
-    <div id="backend-info"></div>
-    <button id="go-to-form" class="btn">Перейти к форме</button>
+    <h1>Профиль пользователя</h1>
+    <div class="tg-info"></div>
+    <div class="assignments-info"></div>
+    <a href="/src/pages/form.html" class="go-to-form">Начать тест</a>
   </div>
+  <script>
+    const tg = window.Telegram.WebApp
+  </script>
   <script type="module" src="src/js/main.js"></script>
 </body>
 </html> 
