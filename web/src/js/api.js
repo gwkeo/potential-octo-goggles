@@ -18,3 +18,8 @@ export async function getUsersAssignments(user_id) {
         return `error fetching assignments: ${error}`;
     }
 }
+
+export async function getTask() {
+    const response = await fetch('http://localhost:8080/math/task')
+    return await response.json()
+}
