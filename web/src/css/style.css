@@ -9,10 +9,10 @@ body {
     color: var(--tg-theme-text-color);
 }
 
-.go-to-form {
+button {
     margin: 10px;
     display: inline-block;
-    color: #f1f1f1;
+    color: #ffffff;
     padding: 10px;
     background-color: #0084ff;
     border-radius: 5px;
@@ -34,4 +34,30 @@ img {
     height: var(--image-size);
     border-radius: 50%;
     object-fit: cover;
+}
+
+.group-elements {
+    display: block;
+}
+
+.container {
+    margin: 10px;
+    padding: 10px;
+    background-color: #ffffff;
+    border: none;
+    box-shadow: 0 0 5px 1px #8f8f8f;
+}
+
+.tex {
+    height: 50px;
+}
+
+input {
+    border: none;
+    border-bottom: solid 1px black;
+}
+
+textarea:focus, input:focus {
+    outline: none;
+    border-bottom: solid 1px #0084ff;
 }

@@ -23,3 +23,22 @@ export async function getTask() {
     const response = await fetch('http://localhost:8080/math/task')
     return await response.json()
 }
+
+export async function sendSolution(solution) {
+    const requestBody = JSON.stringify(solution, null, 2)
+
+    try {
+        const response = await fetch( 'http://localhost:8080/assignments', {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: requestBody
+        })
+        const result = await response.json()
+        console.log("done: ", result)
+    } catch (e) {
+        console.error("error: ", e)
+    }
+
+}

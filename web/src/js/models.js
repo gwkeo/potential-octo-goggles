@@ -4,7 +4,7 @@ export const fieldsConfig = [
         label: 'Название',
         jsonKey: 'name',
         required: true,
-        type: 'text'
+        type: 'select'
     },
     {
         id: 'formula',
@@ -143,3 +143,10 @@ export const fieldsConfig = [
         ]
     }
 ];
+
+export const curves = [
+    "Эллипс",
+    "Парабола",
+    "Гипербола",
+    "Мнимый эллипс",
+]
