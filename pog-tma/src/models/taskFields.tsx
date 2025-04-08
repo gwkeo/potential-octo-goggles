@@ -1,4 +1,4 @@
-export interface TaskFields {
+export interface Solution {
     name: string
     task: string
     focus1: {

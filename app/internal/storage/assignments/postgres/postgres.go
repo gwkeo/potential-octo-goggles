@@ -24,7 +24,15 @@ func New(ctx context.Context, connectionString string) (*Storage, error) {
 // Create создает новый assignment
 func (s *Storage) Create(ctx context.Context, assignments *models.Assignment) (int64, error) {
 	id := 0
-	err := s.db.QueryRow(ctx, "INSERT INTO assignments (user_id, formula, grade) VALUES ($1, $2, $3) RETURNING id", assignments.UserID, assignments.Formula, assignments.Grade).Scan(&id)
+	err := s.db.QueryRow(ctx,
+		"INSERT INTO assignments (user_id, formula, grade, time_start, time_end) "+
+			"VALUES ($1, $2, $3, $4, $5) "+
+			"RETURNING id",
+		assignments.UserID,
+		assignments.Formula,
+		assignments.Grade,
+		assignments.TimeStart,
+		assignments.TimeEnd).Scan(&id)
 	if err != nil {
 		return 0, err
 	}

@@ -28,7 +28,6 @@ services:
       dockerfile: Dockerfile
     depends_on:
       - postgres
-      - math
     env_file: .env
     environment:
       CONNECTION_STRING: "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:5432/${POSTGRES_DB}"
@@ -37,17 +36,17 @@ services:
     - "8080:8080"
   webapp:
     build:
-      context: ./pog-tma
+      context: ./web
       dockerfile: Dockerfile
     ports:
-      - "3000:3000"
+      - "80:80"
     volumes:
-      - "./pog-tma:/app"
+      - "./web:/app"
       - "/app/node_modules"
     environment:
       - NODE_ENV=development
       - CHOKIDAR_USEPOLLING=true
-      - VITE_API_BASE_URL=http://localhost:8080
+      - VITE_API_BASE_URL=http://app:8080
     command: ["npm", "run", "dev"]
 
 volumes:

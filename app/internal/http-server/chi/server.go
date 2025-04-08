@@ -40,10 +40,10 @@ func (s *Server) Start() error {
 
 	adder := assignment.NewAddService(s.storage)
 	reader := assignment.NewReadService(s.storage)
-	assignmentsController := handler.NewController(adder, reader)
+	validator := math.NewValidator(s.mathURL)
+	assignmentsController := handler.NewController(adder, reader, validator)
 
 	generator := math.NewGenerator(s.mathURL)
-	validator := math.NewValidator(s.mathURL)
 	tasksController := handler.NewTasksController(generator, validator)
 
 	s.setRoutes(assignmentsController, tasksController)
@@ -70,6 +70,5 @@ func (s *Server) setRoutes(assignmentsController *handler.AssignmentsController,
 
 	s.router.Route("/math", func(r chi.Router) {
 		r.Get("/task", tasksController.HandleGet)
-		r.Post("/task", tasksController.HandlePost)
 	})
 }
