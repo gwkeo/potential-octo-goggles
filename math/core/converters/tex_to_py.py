@@ -6,10 +6,10 @@ def tex_to_py(stand_solution: Solution):
     stand_solution.formula = str(latex2sympy(stand_solution.formula))
     if stand_solution.formula.count('Eq') == 1:
         stand_solution.formula = stand_solution.formula[3:-1].replace(",", "=").replace(" ", "").replace("**", "^")
-    stand_solution.eccenter = str(latex2sympy(stand_solution.eccenter))
+    stand_solution.ec_center = str(latex2sympy(stand_solution.ec_center))
     stand_solution.parameter = str(latex2sympy(stand_solution.parameter))
-    stand_solution.semiaxis_a = str(latex2sympy(stand_solution.semiaxis_a))
-    stand_solution.semiaxis_b = str(latex2sympy(stand_solution.semiaxis_b))
+    stand_solution.semi_axis_a = str(latex2sympy(stand_solution.semi_axis_a))
+    stand_solution.semi_axis_b = str(latex2sympy(stand_solution.semi_axis_b))
     loc_d1 = stand_solution.direct1.find("=") + 1
     stand_solution.direct1 = stand_solution.direct1[:loc_d1] + latex2sympy(stand_solution.direct1)
     loc_d2 = stand_solution.direct2.find("=") + 1

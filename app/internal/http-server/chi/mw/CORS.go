@@ -1,6 +1,8 @@
 package mw
 
-import "net/http"
+import (
+	"net/http"
+)
 
 func NewCORSMiddleWare() func(next http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {

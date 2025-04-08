@@ -1,5 +1,6 @@
 import math
 import re
+from core.models.solution import Solution
 
 from sympy import sqrt
 if __name__ == "__main__":
