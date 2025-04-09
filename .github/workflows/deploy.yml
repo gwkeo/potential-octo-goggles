@@ -38,7 +38,7 @@ jobs:
           host: ${{ secrets.SSH_HOST}}
           username: ${{secrets.SSH_USER}}
           key: ${{secrets.SSH_PRIVATE_KEY}}
-          source: "web/dist/*"
+          source: "web/dist"
           target: "/home/${{ secrets.SSH_USER}}/project/web/dist"
       
       - name: Deploy via SSH
