@@ -1,4 +1,5 @@
 from random import randint
+from core.models.task import Task
 if __name__ == "__main__":
     from models.task import Task
 

@@ -2,6 +2,7 @@ import { getUsersAssignments, getTask, sendSolution } from "./api"
 import { getUserData } from "./telegram"
 import { renderToString } from "katex"
 import { fieldsConfig, curves } from "./models"
+import { BASE_ROUTE, FORM_ROUTE } from "./routes"
 
 document.addEventListener('DOMContentLoaded', async () => {
     if (document.querySelector('.tg-info')) {
@@ -19,7 +20,7 @@ async function initMainPage() {
     renderAssignments(assignments)
 
     document.querySelector('.go-to-form').addEventListener('click', () => {
-        window.location.href = '/src/pages/form'
+        window.location.href = FORM_ROUTE
     })
 }
 
@@ -84,7 +85,7 @@ async function initFormPage() {
     })
 
     document.querySelector('.back-to-main').addEventListener('click', () => {
-        window.location.href = '/'
+        window.location.href = BASE_ROUTE
     })
 
     document.querySelector('.submit').addEventListener('click', async () => {
