@@ -26,6 +26,11 @@ async function initMainPage() {
 
 async function initFormPage() {
 
+    document.querySelector('.back-to-main').addEventListener('click', () => {
+        window.location.href = BASE_ROUTE
+    })
+
+
     const task = await getTask()
     renderTask(task)
 
@@ -82,10 +87,6 @@ async function initFormPage() {
         elem.addEventListener('input', (value) => {
             renderTex(value.target.id, value.target.value)
         })
-    })
-
-    document.querySelector('.back-to-main').addEventListener('click', () => {
-        window.location.href = BASE_ROUTE
     })
 
     document.querySelector('.submit').addEventListener('click', async () => {

@@ -48,7 +48,7 @@ func (s *Server) Start() error {
 
 	s.setRoutes(assignmentsController, tasksController)
 
-	if err := http.ListenAndServe("0.0.0.0:8080", s.router); err != nil {
+	if err := http.ListenAndServe(":8080", s.router); err != nil {
 		return err
 	}
 	return nil

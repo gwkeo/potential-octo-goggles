@@ -1,8 +1,9 @@
 from latex2sympy2_extended import latex2sympy
 from sympy import symbols, solve, N
-from models.solution import Solution
-from models.verdict import Verdict
-import solver, automaton
+
+from core.models.solution import Solution
+from core.models.verdict import Verdict
+from core import solver, automaton
 
 def evaluate_line(equation, x1, x2):
     x = symbols("x")

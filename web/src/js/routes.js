@@ -1,2 +1,2 @@
-export const BASE_ROUTE = "/index.html"
+export const BASE_ROUTE = "/"
 export const FORM_ROUTE = "/src/pages/form.html"

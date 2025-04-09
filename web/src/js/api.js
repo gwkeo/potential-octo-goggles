@@ -20,8 +20,12 @@ export async function getUsersAssignments(user_id) {
 }
 
 export async function getTask() {
-    const response = await fetch(`/api/math/task`)
-    return await response.json()
+    try {
+        const response = await fetch(`/api/math/task`)
+        return await response.json()
+    } catch (e) {
+        return `error: ${e}`
+    }
 }
 
 export async function sendSolution(solution) {
@@ -39,6 +43,7 @@ export async function sendSolution(solution) {
         console.log("done: ", result)
     } catch (e) {
         console.error("error: ", e)
+        return `error: ${e}`
     }
 
 }
