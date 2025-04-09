@@ -23,7 +23,15 @@ jobs:
         run: |
           npm i
           npm run build
-      
+
+      - name: Ensure dist folder exists on server
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST}}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: mkdir -p /home/${{ secrets.SSH_USER }}/project/web/dist
+
       - name: Upload built dist/ via SCP
         uses: appleboy/scp-action@v0.1.4
         with:
