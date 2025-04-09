@@ -21,34 +21,33 @@ jobs:
       - name: Install dependencies and build web
         working-directory: ./web
         run: |
-          npm i
+          npm ci
           npm run build
 
-      - name: Deploy static to server
+      - name: Verify build output
+        run: ls -la ./web/dist
+
+      - name: Deploy and restart services
         uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            rm -rf /home/***/project/web/dist/*
-            scp -r -o StrictHostKeyChecking=no $GITHUB_WORKSPACE/dist/ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/home/${{ secrets.SSH_USER}}/project/web/dist/
-
-      - name: Deploy via SSH
-        uses: appleboy/ssh-action@v1
-        with:
-          host: ${{secrets.SSH_HOST}}
-          username: ${{secrets.SSH_USER}}
-          key: ${{secrets.SSH_PRIVATE_KEY}}
-          script: |
-            cd /home/${{secrets.SSH_USER}}/project
-            echo "Pulling latest changes..."
+            # Deploy static files
+            echo "Deploying static files..."
+            rm -rf /home/${{ secrets.SSH_USER }}/project/web/dist/*
+            scp -r -o StrictHostKeyChecking=no ./web/dist/* ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/home/${{ secrets.SSH_USER }}/project/web/dist/
+            
+            # Update and restart containers
+            echo "Updating repository..."
+            cd /home/${{ secrets.SSH_USER }}/project
             git pull origin main
-
+            
             echo "Rebuilding and restarting containers..."
-            docker compose down
-            docker compose pull
-            docker compose -f ./docker-compose.prod.yaml up -d --build
-
-            echo "Cleaning up old Docker images..."
+            docker compose -f docker-compose.prod.yaml down
+            docker compose -f docker-compose.prod.yaml pull
+            docker compose -f docker-compose.prod.yaml up -d --build
+            
+            echo "Cleaning up..."
             docker system prune -af
