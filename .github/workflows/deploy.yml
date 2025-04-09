@@ -24,25 +24,18 @@ jobs:
           npm i
           npm run build
 
-      - name: Ensure dist folder exists on server
-        uses: appleboy/ssh-action@v1.0.3
+      - name: Deploy static to server
+        uses: appleboy/ssh-action@v1
         with:
-          host: ${{ secrets.SSH_HOST}}
+          host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: mkdir -p /home/${{ secrets.SSH_USER }}/project/web/dist
+          script: |
+            rm -rf /home/***/project/web/dist/*
+            scp -r -o StrictHostKeyChecking=no $GITHUB_WORKSPACE/dist/* ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/home/${{ secrets.SSH_USER}}/project/web/dist/
 
-      - name: Upload built dist/ via SCP
-        uses: appleboy/scp-action@v0.1.4
-        with:
-          host: ${{ secrets.SSH_HOST}}
-          username: ${{secrets.SSH_USER}}
-          key: ${{secrets.SSH_PRIVATE_KEY}}
-          source: "web/dist"
-          target: "/home/${{ secrets.SSH_USER}}/project/web/dist"
-      
       - name: Deploy via SSH
-        uses: appleboy/ssh-action@v1.0.3
+        uses: appleboy/ssh-action@v1
         with:
           host: ${{secrets.SSH_HOST}}
           username: ${{secrets.SSH_USER}}
