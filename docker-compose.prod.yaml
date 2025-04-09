@@ -6,6 +6,7 @@ services:
       - ./web/dist:/usr/share/nginx/html:ro
     ports:
       - "80:80"
+      - "443:443"
 
   postgres:
     image: postgres:latest
