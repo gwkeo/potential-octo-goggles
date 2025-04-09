@@ -3,9 +3,8 @@ import re
 from core.models.solution import Solution
 
 from sympy import sqrt
-if __name__ == "__main__":
-    from models.solution import *
-    
+from core.models.solution import *
+
 def sgn(vl): # функция для верного написания ответа: x+2y, x-2y, где строка +2 и -2
         if vl > 0:
             return '+' + str(vl)

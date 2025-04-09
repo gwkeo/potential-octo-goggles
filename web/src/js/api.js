@@ -1,6 +1,6 @@
 export async function getUsersAssignments(user_id) {
     try {
-        const response = await fetch(`http://localhost:8080/assignments/?user_id=${user_id}`, {
+        const response = await fetch(`/api/assignments/?user_id=${user_id}`, {
             headers: {
             'Accept': 'application/json' // Явно указываем ожидаемый формат
             }
@@ -20,15 +20,19 @@ export async function getUsersAssignments(user_id) {
 }
 
 export async function getTask() {
-    const response = await fetch('http://localhost:8080/math/task')
-    return await response.json()
+    try {
+        const response = await fetch(`/api/math/task`)
+        return await response.json()
+    } catch (e) {
+        return `error: ${e}`
+    }
 }
 
 export async function sendSolution(solution) {
     const requestBody = JSON.stringify(solution, null, 2)
 
     try {
-        const response = await fetch( 'http://localhost:8080/assignments', {
+        const response = await fetch( `/api/assignments`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -39,6 +43,7 @@ export async function sendSolution(solution) {
         console.log("done: ", result)
     } catch (e) {
         console.error("error: ", e)
+        return `error: ${e}`
     }
 
 }

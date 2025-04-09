@@ -63,12 +63,12 @@ func (s *Server) setRoutes(assignmentsController *handler.AssignmentsController,
 
 	s.router.Use(middleware.Timeout(60 * time.Second))
 
-	s.router.Route("/assignments", func(r chi.Router) {
+	s.router.Route("/api/assignments", func(r chi.Router) {
 		r.Get("/", assignmentsController.HandleGet)
 		r.Post("/", assignmentsController.HandlePost)
 	})
 
-	s.router.Route("/math", func(r chi.Router) {
+	s.router.Route("/api/math", func(r chi.Router) {
 		r.Get("/task", tasksController.HandleGet)
 	})
 }
