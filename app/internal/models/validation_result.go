@@ -1,6 +1,6 @@
 package models
 
 type ValidationResult struct {
-	OK      string `json:"ok"`
+	OK      bool   `json:"ok"`
 	Message string `json:"message"`
 }

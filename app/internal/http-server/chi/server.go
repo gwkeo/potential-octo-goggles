@@ -40,15 +40,15 @@ func (s *Server) Start() error {
 
 	adder := assignment.NewAddService(s.storage)
 	reader := assignment.NewReadService(s.storage)
-	assignmentsController := handler.NewController(adder, reader)
+	validator := math.NewValidator(s.mathURL)
+	assignmentsController := handler.NewController(adder, reader, validator)
 
 	generator := math.NewGenerator(s.mathURL)
-	validator := math.NewValidator(s.mathURL)
 	tasksController := handler.NewTasksController(generator, validator)
 
 	s.setRoutes(assignmentsController, tasksController)
 
-	if err := http.ListenAndServe("0.0.0.0:8080", s.router); err != nil {
+	if err := http.ListenAndServe(":8080", s.router); err != nil {
 		return err
 	}
 	return nil
@@ -63,13 +63,12 @@ func (s *Server) setRoutes(assignmentsController *handler.AssignmentsController,
 
 	s.router.Use(middleware.Timeout(60 * time.Second))
 
-	s.router.Route("/assignments", func(r chi.Router) {
+	s.router.Route("/api/assignments", func(r chi.Router) {
 		r.Get("/", assignmentsController.HandleGet)
 		r.Post("/", assignmentsController.HandlePost)
 	})
 
-	s.router.Route("/math", func(r chi.Router) {
+	s.router.Route("/api/math", func(r chi.Router) {
 		r.Get("/task", tasksController.HandleGet)
-		r.Post("/task", tasksController.HandlePost)
 	})
 }

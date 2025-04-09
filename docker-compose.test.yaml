@@ -1,0 +1,51 @@
+services:
+  nginx:
+    image: nginx:alpine
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./web/dist:/usr/share/nginx/html:ro
+    ports:
+      - "80:80"
+
+  postgres:
+    image: postgres:latest
+    restart: always
+    env_file:
+      - .env
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "${POSTGRES_PORT}:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}" ]
+      interval: 5s
+      retries: 5
+      timeout: 3s
+
+  math:
+    build:
+      context: ./math
+    command: uvicorn main:app --host 0.0.0.0 --port 8000
+    expose:
+      - "8000"
+
+  app:
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    env_file: .env
+    environment:
+      CONNECTION_STRING: "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:5432/${POSTGRES_DB}"
+      MATH_SERVICE_URL: "http://math:8000"
+    expose:
+      - "8080"
+    depends_on:
+      - postgres
+      - math
+
+volumes:
+  pg_data:

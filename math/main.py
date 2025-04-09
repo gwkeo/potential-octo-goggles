@@ -1,18 +1,14 @@
 from fastapi import FastAPI, Body
-from models import Task, Request, Solution
-from core import automaton
-from core import resultasitis
- 
+from core.models.task import Task
+from core.models.solution import ValidationRequest
+from core import automaton, checker, solver
+
 app = FastAPI()
  
 @app.get("/generate", response_model=Task)
 async def get_formula():
-    result = automaton.generate()
-    return {"task": result}
+    return automaton.generate()
 
 @app.post("/validate")
-async def check_solution(request: Request = Body(...)):
-    solution : Solution = request.solution
-    task : str = solution.task
-    key = resultasitis.impost(task)
-    return {"focus1": solution.focus1}
+async def check_solution(validationRequest: ValidationRequest = Body(...)):
+    return checker.valid_answer(validationRequest.solution.task, solver.impost(validationRequest.task))
