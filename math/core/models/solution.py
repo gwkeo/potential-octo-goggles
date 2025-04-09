@@ -1,5 +1,6 @@
 from typing import Optional
 from pydantic import BaseModel
+from core.models.task import Task
 
 class Point(BaseModel):
     x: Optional[str] = None
@@ -21,6 +22,6 @@ class Solution(BaseModel):
     asymptote2: Optional[str] = None
     center: Optional[Point] = None
 
-class Request(BaseModel):
-    user_id: int
+class ValidationRequest(BaseModel):
     solution: Solution
+    task: str

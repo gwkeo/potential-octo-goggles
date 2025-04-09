@@ -26,7 +26,7 @@ jobs:
             echo "Rebuilding and restarting containers..."
             docker compose down
             docker compose pull
-            docker compose up -d --build
+            docker compose -f ./docker-compose.prod.yaml up -d --build
 
             echo "Cleaning up old Docker images..."
             docker system prune -af
