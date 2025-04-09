@@ -32,7 +32,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             rm -rf /home/***/project/web/dist/*
-            scp -r -o StrictHostKeyChecking=no $GITHUB_WORKSPACE/dist/* ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/home/${{ secrets.SSH_USER}}/project/web/dist/
+            scp -r -o StrictHostKeyChecking=no $GITHUB_WORKSPACE/dist/ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/home/${{ secrets.SSH_USER}}/project/web/dist/
 
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1
