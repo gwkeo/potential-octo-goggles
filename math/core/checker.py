@@ -77,12 +77,16 @@ def valid_direct(ans, key):
         return False
     
 def valid_point(ans, key):
-    if ans.x == None or key.x == None:
-        return ans == key
     try:
-        return N(ans.x) == N(key.x) and N(ans.y) == N(key.y)
+        if ans.x == None or key.x == None:
+            return ans == key
+        else:
+            try:
+                return N(ans.x) == N(key.x) and N(ans.y) == N(key.y)
+            except:
+                return False
     except:
-        return False
+        return ans == key
 
 def valid_answer(ans: Solution, key: Solution):
     verd = Verdict(ok=False)
