@@ -12,6 +12,27 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Set up node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies and build web
+        working-directory: ./web
+        run: |
+          npm i
+          npm run build
+      
+      - name: Upload built dist/ via SCP
+        uses: appleboy/scp-action@v0.1.4
+        with:
+          host: ${{ secrets.SSH_HOST}}
+          username: ${{secrets.SSH_USER}}
+          key: ${{secrets.SSH_PRIVATE_KEY}}
+          source: "web/dist/*"
+          target: "/home/${{ secrets.SSH_USER}}/project/web/dist"
+      
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1.0.3
         with:
