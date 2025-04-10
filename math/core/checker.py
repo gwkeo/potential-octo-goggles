@@ -190,6 +190,3 @@ def valid_answer_old(ans, key):
         else:
             r_dict.update({"msg": "Правильно", "ok": True})
     return r_dict
-
-a = automaton.generate().task
-print(valid_answer(solver.impost(a), solver.impost(a)))
