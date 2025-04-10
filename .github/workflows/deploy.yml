@@ -7,47 +7,48 @@ on:
 
 jobs:
   deploy:
+    name: Deploy
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-
-      - name: Install dependencies and build web
-        working-directory: ./web
-        run: |
-          npm i
-          npm run build
-      
-      - name: Upload built dist/ via SCP
-        uses: appleboy/scp-action@v0.1.4
-        with:
-          host: ${{ secrets.SSH_HOST}}
-          username: ${{secrets.SSH_USER}}
-          key: ${{secrets.SSH_PRIVATE_KEY}}
-          source: "web/dist/*"
-          target: "/home/${{ secrets.SSH_USER}}/project/web/dist"
-      
-      - name: Deploy via SSH
-        uses: appleboy/ssh-action@v1.0.3
+      - name: Cleanup old dist
+        uses: appleboy/ssh-action@v1
         with:
           host: ${{secrets.SSH_HOST}}
           username: ${{secrets.SSH_USER}}
           key: ${{secrets.SSH_PRIVATE_KEY}}
           script: |
+            echo "Cleaning old static files"
+            rm -rf /home/${{secrets.SSH_USER}}/project/web/dist
+
+      - name: Install dependencies and build
+        run: |
+          npm ci
+          npm run build
+      
+      - name: Upload to remote server
+        run: |
+          echo "Uploading static files to server"
+          scp -r -o StrictHostKeyChecking=no ./web/dist ${{secrets.SSH_USER}}@${{secrets.SSH_HOST}}:/home/${{secrets.SSH_USER}}/project/web/dist
+
+      - name: Restart services
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{secrets.SSH_HOST}}
+          username: ${{secrets.SSH_USER}}
+          key: ${{secrets.SSH_PRIVATE_KEY}}
+          script: |
+            echo "Updating repo"
             cd /home/${{secrets.SSH_USER}}/project
-            echo "Pulling latest changes..."
             git pull origin main
 
-            echo "Rebuilding and restarting containers..."
-            docker compose down
-            docker compose pull
-            docker compose -f ./docker-compose.prod.yaml up -d --build
+            echo "Rebuilding and restarting containers"
+            docker compose -f docker-compose.prod.yaml down
+            docker compose -f docker-compose.prod.yaml pull
+            docker compose -f docker-compose.prod.yaml up --build -d
 
-            echo "Cleaning up old Docker images..."
+            echo "Cleaning up"
             docker system prune -af
+
