@@ -23,6 +23,11 @@ jobs:
             echo "Cleaning old static files"
             rm -rf /home/${{secrets.SSH_USER}}/project/web/dist
 
+      - name: Set up node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
       - name: Install dependencies and build
         run: |
           npm ci
