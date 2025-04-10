@@ -2,11 +2,21 @@ services:
   nginx:
     image: nginx:alpine
     volumes:
-      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./nginx/default.conf:/etc/nginx/conf.d/nginx.conf
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
       - ./web/dist:/usr/share/nginx/html:ro
     ports:
       - "80:80"
       - "443:443"
+  
+  certbot:
+    image: certbot/certbot
+    container_name: certbot
+    volumes:
+      - ./certbot/conf:/etc/lestencrypt
+      - ./certbot/www:/var/www/certbot
+    command: certonly --webroot -w /var/www/certbot --force-renewal --email rahman.i@mail.ru -d potential-octo-goggles.ru --agree-tos
 
   postgres:
     image: postgres:latest
