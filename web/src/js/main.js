@@ -32,7 +32,6 @@ async function initFormPage() {
 
 
     const task = await getTask()
-    renderTask(task)
 
     const container = document.querySelector('.container')
     fieldsConfig.forEach(elem => {
@@ -122,7 +121,8 @@ async function initFormPage() {
 
 function renderTask(task) {
     const taskContent = document.querySelector('.task')
-    taskContent.innerHTML = `${renderToString(task.task, {throwOnError: false})}`
+
+    taskContent.innerHTML = `${renderToString("x=y", {throwOnError: false})}`
 }
 
 function renderTex(key, value) {

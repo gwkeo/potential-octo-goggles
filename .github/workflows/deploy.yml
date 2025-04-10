@@ -7,47 +7,48 @@ on:
 
 jobs:
   deploy:
+    name: Deploy
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up node.js
-        uses: actions/setup-node@v4
+      - name: Cleanup old dist
+        uses: appleboy/ssh-action@v1
         with:
-          node-version: 20
+          host: ${{secrets.SSH_HOST}}
+          username: ${{secrets.SSH_USER}}
+          key: ${{secrets.SSH_PRIVATE_KEY}}
+          script: |
+            echo "Cleaning old static files"
+            rm -rf /home/${{secrets.SSH_USER}}/project/web/dist
 
-      - name: Install dependencies and build web
-        working-directory: ./web
+      - name: Install dependencies and build
         run: |
           npm ci
           npm run build
+      
+      - name: Upload to remote server
+        run: |
+          echo "Uploading static files to server"
+          scp -r -o StrictHostKeyChecking=no ./web/dist ${{secrets.SSH_USER}}@${{secrets.SSH_HOST}}:/home/${{secrets.SSH_USER}}/project/web/dist
 
-      - name: Verify build output
-        run: ls -la ./web/dist
-
-      - name: Deploy and restart services
+      - name: Restart services
         uses: appleboy/ssh-action@v1
         with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          host: ${{secrets.SSH_HOST}}
+          username: ${{secrets.SSH_USER}}
+          key: ${{secrets.SSH_PRIVATE_KEY}}
           script: |
-            # Deploy static files
-            echo "Deploying static files..."
-            rm -rf /home/${{ secrets.SSH_USER }}/project/web/dist/*
-            scp -r -o StrictHostKeyChecking=no ./web/dist/* ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/home/${{ secrets.SSH_USER }}/project/web/dist/
-            
-            # Update and restart containers
-            echo "Updating repository..."
-            cd /home/${{ secrets.SSH_USER }}/project
+            echo "Updating repo"
+            cd /home/${{secrets.SSH_USER}}/project
             git pull origin main
-            
-            echo "Rebuilding and restarting containers..."
+
+            echo "Rebuilding and restarting containers"
             docker compose -f docker-compose.prod.yaml down
             docker compose -f docker-compose.prod.yaml pull
-            docker compose -f docker-compose.prod.yaml up -d --build
-            
-            echo "Cleaning up..."
+            docker compose -f docker-compose.prod.yaml up --build -d
+
+            echo "Cleaning up"
             docker system prune -af
+
