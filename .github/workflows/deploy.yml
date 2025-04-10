@@ -22,6 +22,7 @@ jobs:
           script: |
             echo "Cleaning old static files"
             rm -rf /home/${{secrets.SSH_USER}}/project/web/dist
+            mkdir /home/${{secrets.SSH_USER}}/project/web/dist
 
       - name: Set up node.js
         uses: actions/setup-node@v4
@@ -37,7 +38,7 @@ jobs:
       - name: Upload to remote server
         run: |
           echo "Uploading static files to server"
-          scp -r -o StrictHostKeyChecking=no ./web/dist ${{secrets.SSH_USER}}@${{secrets.SSH_HOST}}:/home/${{secrets.SSH_USER}}/project/web/dist
+          scp -r -o StrictHostKeyChecking=no ./web/dist/* ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/home/${{ secrets.SSH_USER }}/project/web/dist/
 
       - name: Restart services
         uses: appleboy/ssh-action@v1
