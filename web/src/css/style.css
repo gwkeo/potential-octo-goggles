@@ -20,6 +20,11 @@ button {
     text-decoration: none;
 }
 
+.profile {
+
+    display: block;
+}
+
 .assignment {
     border: none;
     background-color: #3f5469;
