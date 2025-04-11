@@ -1,6 +1,6 @@
 from fastapi import FastAPI, Body
 from core.models.task import Task
-from core.models.solution import ValidationRequest
+from core.models.solution import Solution
 from core import automaton, checker, solver
 
 app = FastAPI()
@@ -10,5 +10,6 @@ async def get_formula():
     return automaton.generate()
 
 @app.post("/validate")
-async def check_solution(validationRequest: ValidationRequest = Body(...)):
-    return checker.valid_answer(validationRequest.solution.task, solver.impost(validationRequest.task))
+async def check_solution(solution: Solution = Body(...)):
+    print(checker.valid_answer(solution.task, solver.impost(solution.task)))
+    return {"ping": "pong"}
