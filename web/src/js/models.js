@@ -8,7 +8,7 @@ export const fieldsConfig = [
     },
     {
         id: 'formula',
-        label: 'Формула',
+        label: 'Каноническое уравнение',
         jsonKey: 'formula',
         required: true,
         type: 'text',
