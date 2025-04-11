@@ -3,21 +3,21 @@ from pydantic import BaseModel
 from core.models.task import Task
 
 class Point(BaseModel):
-    x: Optional[str] = None
-    y: Optional[str] = None
+    x: Optional[str] = ""
+    y: Optional[str] = ""
 
 class Solution(BaseModel):
     task: str
-    name: Optional[str] = None
-    formula: Optional[str] = None
+    name: Optional[str] = ""
+    formula: Optional[str] = ""
     focus1: Optional[Point] = None
     focus2: Optional[Point] = None
-    eccenter: Optional[str] = None
-    parameter: Optional[str] = None
-    direct1: Optional[str] = None
-    direct2: Optional[str] = None
-    semiaxis_a: Optional[str] = None
-    semiaxis_b: Optional[str] = None
-    asymptote1: Optional[str] = None
-    asymptote2: Optional[str] = None
+    eccenter: Optional[str] = ""
+    parameter: Optional[str] = ""
+    direct1: Optional[str] = ""
+    direct2: Optional[str] = ""
+    semiaxis_a: Optional[str] = ""
+    semiaxis_b: Optional[str] = ""
+    asymptote1: Optional[str] = ""
+    asymptote2: Optional[str] = ""
     center: Optional[Point] = None

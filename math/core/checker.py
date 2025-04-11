@@ -42,7 +42,7 @@ def valid_formula(ans, key):
         return False
     
 def valid_num_value(ans, key):
-    if ans == None or key == None:
+    if ans == "" or key == "":
         return ans == key
     else:
         try:
@@ -51,7 +51,7 @@ def valid_num_value(ans, key):
             return False
 
 def valid_asymptote(ans, key):
-    if ans == None or key == None:
+    if ans == "" or key == "":
         return ans == key
     else:
         if '**' in ans or '^' in ans:
@@ -63,7 +63,7 @@ def valid_asymptote(ans, key):
                 return False
 
 def valid_direct(ans, key):
-    if ans == None or key == None:
+    if ans == "" or key == "":
         return ans == key
     elif ans[0] != key[0]:
         return False
@@ -78,7 +78,7 @@ def valid_direct(ans, key):
     
 def valid_point(ans, key):
     try:
-        if ans.x == None or key.x == None:
+        if ans.x == "" or key.x == "":
             return ans == key
         else:
             try:
