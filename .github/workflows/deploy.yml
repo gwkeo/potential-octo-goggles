@@ -13,48 +13,27 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Cleanup old dist
+      - name: Build and restart
         uses: appleboy/ssh-action@v1
         with:
           host: ${{secrets.SSH_HOST}}
           username: ${{secrets.SSH_USER}}
           key: ${{secrets.SSH_PRIVATE_KEY}}
           script: |
-            echo "Cleaning old static files"
-            rm -rf /home/${{secrets.SSH_USER}}/project/web/dist
-            mkdir /home/${{secrets.SSH_USER}}/project/web/dist
+            echo "Delete old static"
+            rm -rf /home/${{ secrets.SSH_USER }}/project/web/dist
+            mkdir -p /home/${{ secrets.SSH_USER }}/project/web/dist
 
-      - name: Set up node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-
-      - name: Install dependencies and build
-        working-directory: ./web
-        run: |
-          npm ci
-          npm run build
-      
-      - name: Upload to remote server
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{secrets.SSH_USER}}
-          username: ${{secrets.SSH_USER}}
-          key: ${{secrets.SSH_PRIVATE_KEY}}
-          source: "./web/dist/*"
-          target: "/home/${{secrets.SSH_USER}}/project/web/dist/"
-
-      - name: Restart services
-        uses: appleboy/ssh-action@v1
-        with:
-          host: ${{secrets.SSH_HOST}}
-          username: ${{secrets.SSH_USER}}
-          key: ${{secrets.SSH_PRIVATE_KEY}}
-          script: |
             echo "Updating repo"
             cd /home/${{secrets.SSH_USER}}/project
             git pull origin main
 
+            echo "Building static files"
+            cd ./web
+            npm i
+            npm run build
+
+            cd /home/${{secrets.SSH_USER}}/project
             echo "Rebuilding and restarting containers"
             docker compose -f docker-compose.prod.yaml down
             docker compose -f docker-compose.prod.yaml pull
