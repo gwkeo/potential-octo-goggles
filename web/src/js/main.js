@@ -32,6 +32,7 @@ async function initFormPage() {
 
 
     const task = await getTask()
+    renderTask()
 
     const container = document.querySelector('.container')
     fieldsConfig.forEach(elem => {
@@ -89,7 +90,7 @@ async function initFormPage() {
     })
 
     document.querySelector('.submit').addEventListener('click', async () => {
-        const formData = {
+        const solution = {
             name: document.querySelector('select.name').value,
             task: task,
             formula: document.querySelector('.form-input#task').value,
@@ -114,16 +115,21 @@ async function initFormPage() {
             asymptote1: document.querySelector('input#asymptote1').value,
             asymptote2: document.querySelector('input#asymptote2').value
           }
-
+          
+        userData = getUserData()
+        const formData = {
+            user_id: userData.id,
+            formula: solution.task,
+            solution: solution
+        }
         console.log(formData)
         await sendSolution(formData)
     })
 }
 
-function renderTask(task) {
+async function renderTask(task) {
     const taskContent = document.querySelector('.task')
-
-    taskContent.innerHTML = `${renderToString("x=y", {throwOnError: false})}`
+    taskContent.innerHTML = `${renderToString(task, {throwOnError: false})}`
 }
 
 function renderTex(key, value) {

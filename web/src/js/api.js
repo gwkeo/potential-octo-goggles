@@ -22,14 +22,16 @@ export async function getUsersAssignments(user_id) {
 export async function getTask() {
     try {
         const response = await fetch(`/api/math/task`)
+        console.log(response.json())
         return await response.json()
     } catch (e) {
+        console.error(e)
         return `error: ${e}`
     }
 }
 
 export async function sendSolution(solution) {
-    const requestBody = JSON.stringify(solution, null, 2)
+    const requestBody = JSON.stringify(solution)
 
     try {
         const response = await fetch( `/api/assignments`, {
