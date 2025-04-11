@@ -22,7 +22,6 @@ export async function getUsersAssignments(user_id) {
 export async function getTask() {
     try {
         const response = await fetch(`/api/math/task`)
-        console.log(response.json())
         return await response.json()
     } catch (e) {
         console.error(e)

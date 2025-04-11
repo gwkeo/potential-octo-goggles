@@ -30,9 +30,8 @@ async function initFormPage() {
         window.location.href = BASE_ROUTE
     })
 
-
-    const task = await getTask()
-    renderTask()
+    let task = await getTask()
+    renderTask(task)
 
     const container = document.querySelector('.container')
     fieldsConfig.forEach(elem => {
@@ -90,46 +89,52 @@ async function initFormPage() {
     })
 
     document.querySelector('.submit').addEventListener('click', async () => {
-        const solution = {
-            name: document.querySelector('select.name').value,
-            task: task,
-            formula: document.querySelector('.form-input#task').value,
-            focus1: {
-              x: document.querySelector('input#focus1_x').value,
-              y: document.querySelector('input#focus1_y').value
-            },
-            focus2: {
-              x: document.querySelector('input#focus2_x').value,
-              y: document.querySelector('input#focus2_y').value
-            },
-            center: {
-              x: document.querySelector('input#center_x').value,
-              y: document.querySelector('input#center_y').value
-            },
-            eccenter: document.querySelector('input#eccenter').value,
-            parameter: document.querySelector('input#parameter').value,
-            direct1: document.querySelector('input#direct1').value,
-            direct2: document.querySelector('input#direct2').value,
-            semiaxis_a: document.querySelector('input#semiaxis_a').value,
-            semiaxis_b: document.querySelector('input#semiaxis_b').value,
-            asymptote1: document.querySelector('input#asymptote1').value,
-            asymptote2: document.querySelector('input#asymptote2').value
-          }
-          
-        userData = getUserData()
-        const formData = {
-            user_id: userData.id,
-            formula: solution.task,
-            solution: solution
-        }
-        console.log(formData)
-        await sendSolution(formData)
+        await submitHandler()
     })
 }
 
-async function renderTask(task) {
+async function submitHandler() {
+    const solution = {
+        name: document.querySelector('select.name').value,
+        task: task.task,
+        formula: document.querySelector('.form-input#task').value,
+        focus1: {
+          x: document.querySelector('input#focus1_x').value,
+          y: document.querySelector('input#focus1_y').value
+        },
+        focus2: {
+          x: document.querySelector('input#focus2_x').value,
+          y: document.querySelector('input#focus2_y').value
+        },
+        center: {
+          x: document.querySelector('input#center_x').value,
+          y: document.querySelector('input#center_y').value
+        },
+        eccenter: document.querySelector('input#eccenter').value,
+        parameter: document.querySelector('input#parameter').value,
+        direct1: document.querySelector('input#direct1').value,
+        direct2: document.querySelector('input#direct2').value,
+        semiaxis_a: document.querySelector('input#semiaxis_a').value,
+        semiaxis_b: document.querySelector('input#semiaxis_b').value,
+        asymptote1: document.querySelector('input#asymptote1').value,
+        asymptote2: document.querySelector('input#asymptote2').value
+      }
+      
+    let userData = getUserData()
+    let formData = {
+        user_id: userData.id,
+        formula: solution.task.task,
+        solution: solution
+    }
+
+    console.log(formData)
+    await sendSolution(formData)
+}
+
+function renderTask(task) {
     const taskContent = document.querySelector('.task')
-    taskContent.innerHTML = `${renderToString(task, {throwOnError: false})}`
+    const result = renderToString(task.task, {throwOnError: false})
+    taskContent.innerHTML = `${result}`
 }
 
 function renderTex(key, value) {
