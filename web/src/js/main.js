@@ -91,6 +91,7 @@ async function initFormPage() {
     document.querySelector('.submit').addEventListener('click', async () => {
         const formData = {
             name: document.querySelector('select.name').value,
+            task: task,
             formula: document.querySelector('.form-input#task').value,
             focus1: {
               x: document.querySelector('input#focus1_x').value,
@@ -141,13 +142,17 @@ function renderTelegram(data) {
 
 function renderAssignments(data) {
     const userInfo = document.querySelector('.assignments-info')
-    for (let i = 0; i < data.length; i++) {
-        console.log(data[i])
-        userInfo.innerHTML += `
-        <div class="assignment">
-        <div class="formula">${data[i].formula}</div>
-        <div class="grade">${data[i].grade}</div>
-        <div>${data.time_start}</div>
-        </div>`
+    if (data == null) {
+        userInfo.innerHTML = `Список пуст! Хихихаха`
+    } else {
+        for (let i = 0; i < data.length; i++) {
+            console.log(data[i])
+            userInfo.innerHTML += `
+            <div class="assignment">
+            <div class="formula">${data[i].formula}</div>
+            <div class="grade">${data[i].grade}</div>
+            <div>${data.time_start}</div>
+            </div>`
+        }
     }
 }
