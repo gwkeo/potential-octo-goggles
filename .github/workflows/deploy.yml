@@ -7,26 +7,38 @@ on:
 
 jobs:
   deploy:
+    name: Deploy
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-      - name: Deploy via SSH
-        uses: appleboy/ssh-action@v1.0.3
+
+      - name: Build and restart
+        uses: appleboy/ssh-action@v1
         with:
           host: ${{secrets.SSH_HOST}}
           username: ${{secrets.SSH_USER}}
           key: ${{secrets.SSH_PRIVATE_KEY}}
           script: |
+            echo "Delete old static"
+            rm -rf /home/${{ secrets.SSH_USER }}/project/web/dist
+            mkdir -p /home/${{ secrets.SSH_USER }}/project/web/dist
+
+            echo "Updating repo"
             cd /home/${{secrets.SSH_USER}}/project
-            echo "Pulling latest changes..."
             git pull origin main
 
-            echo "Rebuilding and restarting containers..."
-            docker compose down
-            docker compose pull
-            docker compose -f ./docker-compose.prod.yaml up -d --build
+            echo "Building static files"
+            cd ./web
+            npm i
+            npm run build
 
-            echo "Cleaning up old Docker images..."
+            cd /home/${{secrets.SSH_USER}}/project
+            echo "Rebuilding and restarting containers"
+            docker compose -f docker-compose.prod.yaml down
+            docker compose -f docker-compose.prod.yaml pull
+            docker compose -f docker-compose.prod.yaml up --build -d
+
+            echo "Cleaning up"
             docker system prune -af
+
