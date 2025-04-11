@@ -36,12 +36,13 @@ jobs:
           npm run build
       
       - name: Upload to remote server
-        run: |
-          echo "Uploading static files to server"
-          whoami
-          pwd
-          ls -la
-          scp -r -o StrictHostKeyChecking=no ./web/dist/* ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/home/${{ secrets.SSH_USER }}/project/web/dist/
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{secrets.SSH_USER}}
+          username: ${{secrets.SSH_USER}}
+          key: ${{secrets.SSH_PRIVATE_KEY}}
+          source: "./web/dist/*"
+          target: "/home/${{secrets.SSH_USER}}/project/web/dist/"
 
       - name: Restart services
         uses: appleboy/ssh-action@v1
