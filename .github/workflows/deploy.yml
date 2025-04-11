@@ -38,6 +38,8 @@ jobs:
       - name: Upload to remote server
         run: |
           echo "Uploading static files to server"
+          whoami
+          pwd
           scp -r -o StrictHostKeyChecking=no ./web/dist/* ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/home/${{ secrets.SSH_USER }}/project/web/dist/
 
       - name: Restart services
