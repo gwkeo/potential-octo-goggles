@@ -198,7 +198,7 @@ def impost(s):
             p = int1(-b/(2*c)) # параметр
             x0 = -int1((-k+((d/(2*c))**2)*c)/(-b)) # координаты центра
             y0 = int1(-d/(2*c))
-            main_solution.formula = f"(y{sgn(-y0)})^2={2*p}(x{sgn(-x0)})"
+            main_solution.formula = f"(y{sgn(-y0)})^2={2*p}*(x{sgn(-x0)})"
             main_solution.focus1 = Point(x=f"{int1(p/2+x0)}", y=str(y0))
             main_solution.direct1 = f"x = {int1(x0 - p/2)}"
 
@@ -207,7 +207,7 @@ def impost(s):
             p = int1(-d/(2*a))
             x0 = int1(-b/(2*a))
             y0 = -int1((-k+((b/(2*a))**2)*a)/(-d))
-            main_solution.formula = f"(x{sgn(-x0)})^2={2*p}(y{sgn(-y0)})"
+            main_solution.formula = f"(x{sgn(-x0)})^2={2*p}*(y{sgn(-y0)})"
             main_solution.focus1 = Point(x=str(x0), y=f"{int1(p/2+y0)}")                               
             main_solution.direct1 = f"y = {int1(y0 - p/2)}"    
 
