@@ -33,6 +33,60 @@ async function initFormPage() {
     let task = await getTask()
     renderTask(task)
 
+    renderTaskInputs()
+
+    const formInputs = document.querySelectorAll('.form-input')
+    formInputs.forEach(elem => {
+        elem.addEventListener('input', (value) => {
+            renderTex(value.target.id, value.target.value)
+        })
+    })
+
+    document.querySelector('.submit').addEventListener('click', async () => {
+        await submitHandler(task)
+    })
+}
+
+async function submitHandler(task) {
+    const solution = {
+        name: document.querySelector('select.name').value || "0",
+        task: task.task,
+        formula: document.querySelector('.form-input#task').value || "0",
+        focus1: {
+          x: document.querySelector('input#focus1_x').value || "0",
+          y: document.querySelector('input#focus1_y').value || "0"
+        },
+        focus2: {
+          x: document.querySelector('input#focus2_x').value || "0",
+          y: document.querySelector('input#focus2_y').value || "0"
+        },
+        center: {
+          x: document.querySelector('input#center_x').value || "0",
+          y: document.querySelector('input#center_y').value || "0"
+        },
+        eccenter: document.querySelector('input#eccenter').value || "0",
+        parameter: document.querySelector('input#parameter').value || "0",
+        direct1: document.querySelector('input#direct1').value || "0",
+        direct2: document.querySelector('input#direct2').value || "0",
+        semiaxis_a: document.querySelector('input#semiaxis_a').value || "0",
+        semiaxis_b: document.querySelector('input#semiaxis_b').value || "0",
+        asymptote1: document.querySelector('input#asymptote1').value || "0",
+        asymptote2: document.querySelector('input#asymptote2').value || "0"
+      }
+      
+    let userData = getUserData()
+    let formData = {
+        user_id: userData.id,
+        formula: task.task,
+        solution: solution,
+        grade: 0
+    }
+
+    console.log(formData)
+    await sendSolution(formData)
+}
+
+function renderTaskInputs() {
     const container = document.querySelector('.container')
     fieldsConfig.forEach(elem => {
         if (elem.group) {
@@ -80,55 +134,6 @@ async function initFormPage() {
             container.append(input, tex)
         }
     })
-
-    const formInputs = document.querySelectorAll('.form-input')
-    formInputs.forEach(elem => {
-        elem.addEventListener('input', (value) => {
-            renderTex(value.target.id, value.target.value)
-        })
-    })
-
-    document.querySelector('.submit').addEventListener('click', async () => {
-        await submitHandler()
-    })
-}
-
-async function submitHandler() {
-    const solution = {
-        name: document.querySelector('select.name').value,
-        task: task.task,
-        formula: document.querySelector('.form-input#task').value,
-        focus1: {
-          x: document.querySelector('input#focus1_x').value,
-          y: document.querySelector('input#focus1_y').value
-        },
-        focus2: {
-          x: document.querySelector('input#focus2_x').value,
-          y: document.querySelector('input#focus2_y').value
-        },
-        center: {
-          x: document.querySelector('input#center_x').value,
-          y: document.querySelector('input#center_y').value
-        },
-        eccenter: document.querySelector('input#eccenter').value,
-        parameter: document.querySelector('input#parameter').value,
-        direct1: document.querySelector('input#direct1').value,
-        direct2: document.querySelector('input#direct2').value,
-        semiaxis_a: document.querySelector('input#semiaxis_a').value,
-        semiaxis_b: document.querySelector('input#semiaxis_b').value,
-        asymptote1: document.querySelector('input#asymptote1').value,
-        asymptote2: document.querySelector('input#asymptote2').value
-      }
-      
-    let userData = getUserData()
-    let formData = {
-        user_id: userData.id,
-        formula: solution.task.task,
-        solution: solution
-    }
-
-    console.log(formData)
-    await sendSolution(formData)
 }
 
 function renderTask(task) {
