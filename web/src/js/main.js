@@ -26,6 +26,9 @@ async function initMainPage() {
 
 async function initFormPage() {
 
+    document.querySelector('.help-button').addEventListener('click', () => {
+        renderHelpMessage()
+    })
     
     document.querySelector('.back-to-main').addEventListener('click', () => {
         window.location.href = BASE_ROUTE
@@ -49,7 +52,7 @@ async function initFormPage() {
         await handleSubmit(task, time_start, time_end)
     })
 
-    document.querySelector('.close-button').addEventListener('click', () => {
+    document.querySelector('.modal-button').addEventListener('click', () => {
         document.querySelector('.overlay').classList.remove('show')
     })
 }
@@ -58,7 +61,7 @@ async function handleSubmit(task, time_start, time_end) {
     const solution = {
         name: document.querySelector('select.name').value || "0",
         task: task.task,
-        formula: document.querySelector('.form-input#task').value || "0",
+        formula: document.querySelector('.form-input#formula').value || "0",
         focus1: {
           x: document.querySelector('input#focus1_x').value || "0",
           y: document.querySelector('input#focus1_y').value || "0"
@@ -100,27 +103,34 @@ async function handleSubmit(task, time_start, time_end) {
     }
 }
 
+function renderHelpMessage() {
+    document.querySelector('.overlay').classList.add('show')
+    document.querySelector('.modal-title').innerText = 'Помощь'
+    document.querySelector('.modal-content').innerHTML = '<div>Здесь будет help message</div>'
+}
+
 function renderSuccess(msg) {
     document.querySelector('.overlay').classList.add('show')
     document.querySelector('.modal-content').innerText = 'Задание выполнено верно, ответ засчитан\n' + msg
-    document.querySelector('.modal-title').innerText = 'Success'
+    document.querySelector('.modal-title').innerText = 'Успех'
 }
 
 function renderError(msg) {
     document.querySelector('.overlay').classList.add('show')
     document.querySelector('.modal-content').innerText = msg
-    document.querySelector('.modal-title').innerText = 'Error'
+    document.querySelector('.modal-title').innerText = 'Ошибка'
 }
 
 function renderTaskInputs() {
     const container = document.querySelector('.container')
     fieldsConfig.forEach(elem => {
         if (elem.group) {
-            const groupTitle = document.createElement('h2')
-            groupTitle.innerText = elem.group
-
+            
             const inputs = document.createElement('div')
             inputs.className = 'group-elements'
+            const groupTitle = document.createElement('h2')
+            groupTitle.innerText = elem.group
+            inputs.append(groupTitle)
             elem.fields.forEach(field => {
                 const inputFields = document.createElement('div')
                 inputFields.className = 'field'
@@ -142,7 +152,7 @@ function renderTaskInputs() {
                 inputFields.append(input, tex)
                 inputs.append(inputFields)
             });
-            container.append(groupTitle, inputs)
+            container.append(inputs)
         } else if (elem.type == "select") {
             const select = document.createElement('select')
             select.className = 'name'
@@ -152,17 +162,26 @@ function renderTaskInputs() {
                 select.appendChild(option)
             });
 
-            container.appendChild(select)
+            const separatorDiv = document.createElement('div')
+            separatorDiv.className = 'group-elements'
+            
+            separatorDiv.appendChild(select)
+            container.appendChild(separatorDiv)
         } else {
+            const formulaInput = document.createElement('div')
+            formulaInput.className = 'group-elements'
+
             const input = document.createElement('input')
+            input.setAttribute('placeholder', elem.label)
             input.className = 'form-input'
-            input.id = 'task'
+            input.id = 'formula'
 
             const tex = document.createElement('div')
             tex.className = 'tex'
-            tex.id = 'task'
+            tex.id = 'formula'
 
-            container.append(input, tex)
+            formulaInput.append(input, tex)
+            container.append(formulaInput)
         }
     })
 }

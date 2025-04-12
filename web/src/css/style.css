@@ -43,10 +43,11 @@ img {
 
 .group-elements {
     display: block;
+    margin: 10px;
 }
 
 .container {
-    margin: 10px;
+    margin-top: 10px;
     padding: 10px;
     background-color: #ffffff;
     border: none;
@@ -88,4 +89,14 @@ textarea:focus, input:focus {
     background-color: white;
     border-radius: 10px;
     padding: 10px;
+}
+
+.button-warn {
+    background-color: red;
+}
+
+.headers {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
