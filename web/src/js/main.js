@@ -26,13 +26,93 @@ async function initMainPage() {
 
 async function initFormPage() {
 
+    
     document.querySelector('.back-to-main').addEventListener('click', () => {
         window.location.href = BASE_ROUTE
     })
+    
+    let task = await getTask()
+    renderTask(task)
+    const time_start = new Date().toISOString()
 
+    renderTaskInputs()
 
-    const task = await getTask()
+    const formInputs = document.querySelectorAll('.form-input')
+    formInputs.forEach(elem => {
+        elem.addEventListener('input', (value) => {
+            renderTex(value.target.id, value.target.value)
+        })
+    })
 
+    document.querySelector('.submit').addEventListener('click', async () => {
+        const time_end = new Date().toISOString()
+        await handleSubmit(task, time_start, time_end)
+    })
+
+    document.querySelector('.close-button').addEventListener('click', () => {
+        document.querySelector('.overlay').classList.remove('show')
+    })
+}
+
+async function handleSubmit(task, time_start, time_end) {
+    const solution = {
+        name: document.querySelector('select.name').value || "0",
+        task: task.task,
+        formula: document.querySelector('.form-input#task').value || "0",
+        focus1: {
+          x: document.querySelector('input#focus1_x').value || "0",
+          y: document.querySelector('input#focus1_y').value || "0"
+        },
+        focus2: {
+          x: document.querySelector('input#focus2_x').value || "0",
+          y: document.querySelector('input#focus2_y').value || "0"
+        },
+        center: {
+          x: document.querySelector('input#center_x').value || "0",
+          y: document.querySelector('input#center_y').value || "0"
+        },
+        eccenter: document.querySelector('input#eccenter').value || "0",
+        parameter: document.querySelector('input#parameter').value || "0",
+        direct1: document.querySelector('input#direct1').value || "0",
+        direct2: document.querySelector('input#direct2').value || "0",
+        semiaxis_a: document.querySelector('input#semiaxis_a').value || "0",
+        semiaxis_b: document.querySelector('input#semiaxis_b').value || "0",
+        asymptote1: document.querySelector('input#asymptote1').value || "0",
+        asymptote2: document.querySelector('input#asymptote2').value || "0"
+      }
+      
+    let userData = getUserData()
+    let formData = {
+        user_id: userData.id,
+        formula: task.task,
+        solution: solution,
+        time_start: time_start,
+        time_end:time_end
+    }
+
+    console.log(formData)
+    let response = await sendSolution(formData)
+    console.log(response.Message)
+    if (!response.OK) {
+        renderError(response.Message)
+    } else {
+        renderSuccess(response.Message)
+    }
+}
+
+function renderSuccess(msg) {
+    document.querySelector('.overlay').classList.add('show')
+    document.querySelector('.modal-content').innerText = 'Задание выполнено верно, ответ засчитан\n' + msg
+    document.querySelector('.modal-title').innerText = 'Success'
+}
+
+function renderError(msg) {
+    document.querySelector('.overlay').classList.add('show')
+    document.querySelector('.modal-content').innerText = msg
+    document.querySelector('.modal-title').innerText = 'Error'
+}
+
+function renderTaskInputs() {
     const container = document.querySelector('.container')
     fieldsConfig.forEach(elem => {
         if (elem.group) {
@@ -47,6 +127,11 @@ async function initFormPage() {
                 inputFields.id = field.id
 
                 const input = document.createElement('input')
+                input.setAttribute('type', 'text')
+                input.setAttribute('inputmode', 'text')
+                input.setAttribute('enterkeyhint', 'done')
+                input.setAttribute('autocomplete', 'off')
+
                 input.className = 'form-input'
                 input.id = field.id
                 input.placeholder = field.label
@@ -80,50 +165,12 @@ async function initFormPage() {
             container.append(input, tex)
         }
     })
-
-    const formInputs = document.querySelectorAll('.form-input')
-    formInputs.forEach(elem => {
-        elem.addEventListener('input', (value) => {
-            renderTex(value.target.id, value.target.value)
-        })
-    })
-
-    document.querySelector('.submit').addEventListener('click', async () => {
-        const formData = {
-            name: document.querySelector('select.name').value,
-            task: task,
-            formula: document.querySelector('.form-input#task').value,
-            focus1: {
-              x: document.querySelector('input#focus1_x').value,
-              y: document.querySelector('input#focus1_y').value
-            },
-            focus2: {
-              x: document.querySelector('input#focus2_x').value,
-              y: document.querySelector('input#focus2_y').value
-            },
-            center: {
-              x: document.querySelector('input#center_x').value,
-              y: document.querySelector('input#center_y').value
-            },
-            eccenter: document.querySelector('input#eccenter').value,
-            parameter: document.querySelector('input#parameter').value,
-            direct1: document.querySelector('input#direct1').value,
-            direct2: document.querySelector('input#direct2').value,
-            semiaxis_a: document.querySelector('input#semiaxis_a').value,
-            semiaxis_b: document.querySelector('input#semiaxis_b').value,
-            asymptote1: document.querySelector('input#asymptote1').value,
-            asymptote2: document.querySelector('input#asymptote2').value
-          }
-
-        console.log(formData)
-        await sendSolution(formData)
-    })
 }
 
 function renderTask(task) {
     const taskContent = document.querySelector('.task')
-
-    taskContent.innerHTML = `${renderToString("x=y", {throwOnError: false})}`
+    const result = renderToString(task.task, {throwOnError: false})
+    taskContent.innerHTML = `${result}`
 }
 
 function renderTex(key, value) {
@@ -145,13 +192,21 @@ function renderAssignments(data) {
     if (data == null) {
         userInfo.innerHTML = `Список пуст! Хихихаха`
     } else {
+
+        data.sort((a,b) => {
+            let aa = new Date(a.time_start)
+            let bb = new Date(b.time_start)
+
+            return bb - aa
+        })
+
         for (let i = 0; i < data.length; i++) {
             console.log(data[i])
             userInfo.innerHTML += `
             <div class="assignment">
             <div class="formula">${data[i].formula}</div>
             <div class="grade">${data[i].grade}</div>
-            <div>${data.time_start}</div>
+            <div>${new Date(data[i].time_start).toLocaleDateString()}</div>
             </div>`
         }
     }

@@ -6,6 +6,8 @@ services:
       - ./web/dist:/usr/share/nginx/html:ro
     ports:
       - "80:80"
+    depends_on:
+      - app
 
   postgres:
     image: postgres:latest

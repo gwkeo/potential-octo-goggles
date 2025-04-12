@@ -9,7 +9,9 @@ services:
     ports:
       - "80:80"
       - "443:443"
-  
+    depends_on:
+      - app
+
   certbot:
     image: certbot/certbot
     container_name: certbot
