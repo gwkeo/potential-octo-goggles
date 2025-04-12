@@ -66,3 +66,26 @@ textarea:focus, input:focus {
     outline: none;
     border-bottom: solid 1px #0084ff;
 }
+
+.overlay {
+    position: fixed;
+    display: none;
+    background-color: rgba(0,0,0,0.3);
+    width: 100vw;
+    height: 100vh;
+    left: 0;
+    top: 0;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+.show {
+    display: flex;
+}
+
+.modal {
+    background-color: white;
+    border-radius: 10px;
+    padding: 10px;
+}

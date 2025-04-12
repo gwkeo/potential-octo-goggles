@@ -26,12 +26,14 @@ async function initMainPage() {
 
 async function initFormPage() {
 
+    
     document.querySelector('.back-to-main').addEventListener('click', () => {
         window.location.href = BASE_ROUTE
     })
-
+    
     let task = await getTask()
     renderTask(task)
+    const time_start = new Date().toISOString()
 
     renderTaskInputs()
 
@@ -43,11 +45,16 @@ async function initFormPage() {
     })
 
     document.querySelector('.submit').addEventListener('click', async () => {
-        await submitHandler(task)
+        const time_end = new Date().toISOString()
+        await handleSubmit(task, time_start, time_end)
+    })
+
+    document.querySelector('.close-button').addEventListener('click', () => {
+        document.querySelector('.overlay').classList.remove('show')
     })
 }
 
-async function submitHandler(task) {
+async function handleSubmit(task, time_start, time_end) {
     const solution = {
         name: document.querySelector('select.name').value || "0",
         task: task.task,
@@ -79,11 +86,30 @@ async function submitHandler(task) {
         user_id: userData.id,
         formula: task.task,
         solution: solution,
-        grade: 0
+        time_start: time_start,
+        time_end:time_end
     }
 
     console.log(formData)
-    await sendSolution(formData)
+    let response = await sendSolution(formData)
+    console.log(response.Message)
+    if (!response.OK) {
+        renderError(response.Message)
+    } else {
+        renderSuccess(response.Message)
+    }
+}
+
+function renderSuccess(msg) {
+    document.querySelector('.overlay').classList.add('show')
+    document.querySelector('.modal-content').innerText = 'Задание выполнено верно, ответ засчитан\n' + msg
+    document.querySelector('.modal-title').innerText = 'Success'
+}
+
+function renderError(msg) {
+    document.querySelector('.overlay').classList.add('show')
+    document.querySelector('.modal-content').innerText = msg
+    document.querySelector('.modal-title').innerText = 'Error'
 }
 
 function renderTaskInputs() {
@@ -101,6 +127,11 @@ function renderTaskInputs() {
                 inputFields.id = field.id
 
                 const input = document.createElement('input')
+                input.setAttribute('type', 'text')
+                input.setAttribute('inputmode', 'text')
+                input.setAttribute('enterkeyhint', 'done')
+                input.setAttribute('autocomplete', 'off')
+
                 input.className = 'form-input'
                 input.id = field.id
                 input.placeholder = field.label
@@ -161,13 +192,21 @@ function renderAssignments(data) {
     if (data == null) {
         userInfo.innerHTML = `Список пуст! Хихихаха`
     } else {
+
+        data.sort((a,b) => {
+            let aa = new Date(a.time_start)
+            let bb = new Date(b.time_start)
+
+            return bb - aa
+        })
+
         for (let i = 0; i < data.length; i++) {
             console.log(data[i])
             userInfo.innerHTML += `
             <div class="assignment">
             <div class="formula">${data[i].formula}</div>
             <div class="grade">${data[i].grade}</div>
-            <div>${data.time_start}</div>
+            <div>${new Date(data[i].time_start).toLocaleDateString()}</div>
             </div>`
         }
     }

@@ -41,9 +41,8 @@ export async function sendSolution(solution) {
             body: requestBody
         })
         const result = await response.json()
-        console.log("done: ", result)
+        return result
     } catch (e) {
-        console.error("error: ", e)
         return `error: ${e}`
     }
 
