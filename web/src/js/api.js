@@ -24,12 +24,13 @@ export async function getTask() {
         const response = await fetch(`/api/math/task`)
         return await response.json()
     } catch (e) {
+        console.error(e)
         return `error: ${e}`
     }
 }
 
 export async function sendSolution(solution) {
-    const requestBody = JSON.stringify(solution, null, 2)
+    const requestBody = JSON.stringify(solution)
 
     try {
         const response = await fetch( `/api/assignments`, {
@@ -40,9 +41,8 @@ export async function sendSolution(solution) {
             body: requestBody
         })
         const result = await response.json()
-        console.log("done: ", result)
+        return result
     } catch (e) {
-        console.error("error: ", e)
         return `error: ${e}`
     }
 

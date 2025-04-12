@@ -52,7 +52,7 @@ func (c *AssignmentsController) HandlePost(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
-	assignmentResult, err := c.validator.Validate(ctx, &a.Solution)
+	validationResult, err := c.validator.Validate(ctx, &a.Solution)
 	if err != nil {
 		http.Error(w, message.Wrap("error validating solution", err), http.StatusInternalServerError)
 		return
@@ -66,8 +66,8 @@ func (c *AssignmentsController) HandlePost(w http.ResponseWriter, r *http.Reques
 
 	assignmentResponse := &models.AssignmentResponse{
 		AssignmentID: id,
-		OK:           assignmentResult.OK,
-		Message:      assignmentResult.Message,
+		OK:           validationResult.OK,
+		Message:      validationResult.Message,
 	}
 	var response []byte
 	response, err = json.Marshal(assignmentResponse)

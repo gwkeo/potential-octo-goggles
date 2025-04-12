@@ -42,7 +42,7 @@ def valid_formula(ans, key):
         return False
     
 def valid_num_value(ans, key):
-    if ans == None or key == None:
+    if ans == "" or key == "":
         return ans == key
     else:
         try:
@@ -51,7 +51,7 @@ def valid_num_value(ans, key):
             return False
 
 def valid_asymptote(ans, key):
-    if ans == None or key == None:
+    if ans == "" or key == "":
         return ans == key
     else:
         if '**' in ans or '^' in ans:
@@ -63,7 +63,7 @@ def valid_asymptote(ans, key):
                 return False
 
 def valid_direct(ans, key):
-    if ans == None or key == None:
+    if ans == "" or key == "":
         return ans == key
     elif ans[0] != key[0]:
         return False
@@ -77,12 +77,16 @@ def valid_direct(ans, key):
         return False
     
 def valid_point(ans, key):
-    if ans.x == None or key.x == None:
-        return ans == key
     try:
-        return N(ans.x) == N(key.x) and N(ans.y) == N(key.y)
+        if ans.x == "" or key.x == "":
+            return ans == key
+        else:
+            try:
+                return N(ans.x) == N(key.x) and N(ans.y) == N(key.y)
+            except:
+                return False
     except:
-        return False
+        return ans == key
 
 def valid_answer(ans: Solution, key: Solution):
     verd = Verdict(ok=False)
@@ -186,6 +190,3 @@ def valid_answer_old(ans, key):
         else:
             r_dict.update({"msg": "Правильно", "ok": True})
     return r_dict
-
-a = automaton.generate().task
-print(valid_answer(solver.impost(a), solver.impost(a)))
