@@ -7,6 +7,26 @@ import { BASE_ROUTE, FORM_ROUTE } from "./routes"
 document.addEventListener('DOMContentLoaded', async () => {
     updateNavbarHeight()
 
+    const tg = window?.Telegram?.WebApp
+
+    function applyTheme(themeParams) {
+        const root = document.documentElement;
+    
+        root.style.setProperty('--default-light-color', themeParams.bg_color || '#f8f8f8');
+        root.style.setProperty('--default-dark-color', themeParams.text_color || '#1f1f1f');
+        root.style.setProperty('--default-secondary-light-color', themeParams.secondary_bg_color || '#f6fafd');
+        root.style.setProperty('--default-secondary-dark-color', themeParams.hint_color || '#313131');
+        root.style.setProperty('--default-blue', themeParams.button_color || '#0084ff');
+    }
+    
+    if (tg && tg.themeParams) {
+        applyTheme(tg.themeParams);
+    }
+    
+    tg?.onEvent('themeChanged', () => {
+        applyTheme(tg.themeParams);
+    });
+
     if (document.querySelector('.tg-info')) {
         await initMainPage()
     } else if (document.querySelector('.form')) {
@@ -117,9 +137,9 @@ async function handleSubmit(task, time_start, time_end) {
     let response = await sendSolution(formData)
     console.log(response.Message)
     if (!response.OK) {
-        renderError(response.Message)
+        alert(response.msg)
     } else {
-        renderSuccess(response.Message)
+        alert(response.Message)
     }
 }
 
@@ -229,7 +249,7 @@ function renderTelegram(data) {
 function renderAssignments(data) {
     const userInfo = document.querySelector('.assignments-info')
     if (data == null) {
-        userInfo.innerHTML = `Список пуст! Хихихаха`
+        userInfo.innerHTML = `Список пуст!`
     } else {
 
         data.sort((a,b) => {
@@ -243,9 +263,10 @@ function renderAssignments(data) {
             console.log(data[i])
             userInfo.innerHTML += `
             <div class="assignment">
-            <div class="formula">${data[i].formula}</div>
-            <div class="grade">${data[i].grade}</div>
-            <div>${new Date(data[i].time_start).toLocaleDateString()}</div>
+                <p class="formula">Задача: ${data[i].formula}</p>
+                <p class="grade">Статус: ${data[i].grade === 1.0 ? "решена верно" : "не выполнена"}</p>
+                <p>Число попыток: ${data[i].attempts}</p>
+                <p>Дата и время: ${new Date(data[i].time_start).toLocaleString()}</p>
             </div>`
         }
     }

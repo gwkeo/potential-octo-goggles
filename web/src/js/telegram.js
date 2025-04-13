@@ -21,10 +21,11 @@ export function setTestingMenuButtons() {
     const tg = window?.Telegram?.WebApp
     let mainButton = tg.MainButton
     mainButton.text = 'Отправить'
+    mainButton.show()
 
     let secondaryButton = tg.SecondaryButton
     secondaryButton.text = 'Назад'
+    secondaryButton.show()
 
     return {mainButton, secondaryButton}
 }
-
