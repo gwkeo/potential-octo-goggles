@@ -149,18 +149,6 @@ function renderHelpMessage() {
     document.querySelector('.modal-content').innerHTML = '<div>Здесь будет help message</div>'
 }
 
-function renderSuccess(msg) {
-    document.querySelector('.overlay').classList.add('show')
-    document.querySelector('.modal-content').innerText = 'Задание выполнено верно, ответ засчитан\n' + msg
-    document.querySelector('.modal-title').innerText = 'Успех'
-}
-
-function renderError(msg) {
-    document.querySelector('.overlay').classList.add('show')
-    document.querySelector('.modal-content').innerText = msg
-    document.querySelector('.modal-title').innerText = 'Ошибка'
-}
-
 function renderTaskInputs() {
     const container = document.querySelector('.container')
     fieldsConfig.forEach(elem => {
