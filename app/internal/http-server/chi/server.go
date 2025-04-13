@@ -18,6 +18,8 @@ import (
 type storage interface {
 	Create(context.Context, *models.Assignment) (int64, error)
 	UserAssignments(context.Context, int64) ([]models.Assignment, error)
+	Update(ctx context.Context, assignment *models.Assignment) error
+	AssignmentByFormula(ctx context.Context, id int64, formula string) (*models.Assignment, error)
 }
 
 type Server struct {
@@ -38,7 +40,7 @@ func New(storage storage, logger *zap.Logger, mathURL string) *Server {
 
 func (s *Server) Start() error {
 
-	adder := assignment.NewAddService(s.storage)
+	adder := assignment.NewAddService(s.storage, s.storage, s.storage)
 	reader := assignment.NewReadService(s.storage)
 	validator := math.NewValidator(s.mathURL)
 	assignmentsController := handler.NewController(adder, reader, validator)
