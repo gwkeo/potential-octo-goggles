@@ -137,7 +137,7 @@ async function handleSubmit(task, time_start, time_end) {
     let response = await sendSolution(formData)
     console.log(response.Message)
     if (!response.OK) {
-        alert(response.msg)
+        alert(response.Message)
     } else {
         alert(response.Message)
     }
