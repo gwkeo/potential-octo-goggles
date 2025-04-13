@@ -7,3 +7,24 @@ export function getUserData() {
     }
     return userInfo
 }
+
+export function setProfileMenuButton() {
+    const tg = window?.Telegram?.WebApp
+    let mainButton = tg.MainButton
+    mainButton.text = 'Начать тест'
+    mainButton.show()
+
+    return mainButton
+}
+
+export function setTestingMenuButtons() {
+    const tg = window?.Telegram?.WebApp
+    let mainButton = tg.MainButton
+    mainButton.text = 'Отправить'
+
+    let secondaryButton = tg.SecondaryButton
+    secondaryButton.text = 'Назад'
+
+    return {mainButton, secondaryButton}
+}
+

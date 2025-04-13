@@ -1,16 +1,28 @@
 import { getUsersAssignments, getTask, sendSolution } from "./api"
-import { getUserData } from "./telegram"
+import { getUserData, setProfileMenuButton, setTestingMenuButtons } from "./telegram"
 import { renderToString } from "katex"
-import { fieldsConfig, curves } from "./models"
+import { fieldsConfig, curves, buttonActivationTypes } from "./models"
 import { BASE_ROUTE, FORM_ROUTE } from "./routes"
 
 document.addEventListener('DOMContentLoaded', async () => {
+    updateNavbarHeight()
+
     if (document.querySelector('.tg-info')) {
         await initMainPage()
     } else if (document.querySelector('.form')) {
         await initFormPage()
     }
 })
+
+function updateNavbarHeight() {
+    try {
+        const navbar = document.querySelector('.nav');
+        const height = navbar.offsetHeight;
+        document.documentElement.style.setProperty('--nav-height', `${height + 10}px`);
+    } catch (e) {
+        console.error(e)
+    }
+}
 
 async function initMainPage() {
     const userData = getUserData()
@@ -19,41 +31,49 @@ async function initMainPage() {
     const assignments = await getUsersAssignments(userData.id)
     renderAssignments(assignments)
 
-    document.querySelector('.go-to-form').addEventListener('click', () => {
+    let mainButton = setProfileMenuButton()
+    mainButton.onClick(() => {
         window.location.href = FORM_ROUTE
     })
 }
 
 async function initFormPage() {
-
-    document.querySelector('.help-button').addEventListener('click', () => {
-        renderHelpMessage()
-    })
-    
-    document.querySelector('.back-to-main').addEventListener('click', () => {
-        window.location.href = BASE_ROUTE
-    })
     
     let task = await getTask()
     renderTask(task)
+
     const time_start = new Date().toISOString()
-
+    
     renderTaskInputs()
-
     const formInputs = document.querySelectorAll('.form-input')
+
     formInputs.forEach(elem => {
         elem.addEventListener('input', (value) => {
             renderTex(value.target.id, value.target.value)
         })
     })
+    
+    let {mainButton, secondaryButton} = setTestingMenuButtons()
 
-    document.querySelector('.submit').addEventListener('click', async () => {
+    secondaryButton.onClick(() => {
+        window.location.href = BASE_ROUTE
+    })
+    
+    mainButton.onClick(async () => {
         const time_end = new Date().toISOString()
         await handleSubmit(task, time_start, time_end)
     })
 
-    document.querySelector('.modal-button').addEventListener('click', () => {
-        document.querySelector('.overlay').classList.remove('show')
+    buttonActivationTypes.forEach( (type) => {
+        document.querySelector('.help-button').addEventListener(type, () => {
+            renderHelpMessage()
+        })
+    })
+
+    buttonActivationTypes.forEach( (type) => {
+        document.querySelector('.modal-button').addEventListener(type, () => {
+            document.querySelector('.overlay').classList.remove('show')
+        })
     })
 }
 
@@ -200,9 +220,9 @@ function renderTex(key, value) {
 function renderTelegram(data) {
     const tgInfo = document.querySelector('.tg-info')
     tgInfo.innerHTML = 
-    `<div>
-    <img src="${data.photo_url}" alt="">
-    <div class="name">${data.first_name}</div>
+    `<div class="profile-info">
+        <img src="${data.photo_url}" alt="">
+        <div class="name">${data.first_name}</div>
     </div>`
 }
 
