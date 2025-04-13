@@ -10,22 +10,32 @@ export function getUserData() {
 
 export function setProfileMenuButton() {
     const tg = window?.Telegram?.WebApp
-    let mainButton = tg.MainButton
-    mainButton.text = 'Начать тест'
-    mainButton.show()
-
-    return mainButton
+    if (!tg) {
+        console.error("Telegram WebApp is not available.")
+        return null
+    } else {
+        let mainButton = tg.MainButton
+        mainButton.text = 'Начать тест'
+        mainButton.show()
+    
+        return mainButton
+    }
 }
 
 export function setTestingMenuButtons() {
     const tg = window?.Telegram?.WebApp
-    let mainButton = tg.MainButton
-    mainButton.text = 'Отправить'
-    mainButton.show()
-
-    let secondaryButton = tg.SecondaryButton
-    secondaryButton.text = 'Назад'
-    secondaryButton.show()
-
-    return {mainButton, secondaryButton}
+    if (!tg) {
+        console.error("Telegram WebApp is not available.")
+        return null
+    } else {
+        let mainButton = tg.MainButton
+        mainButton.text = 'Отправить'
+        mainButton.show()
+    
+        let secondaryButton = tg.SecondaryButton
+        secondaryButton.text = 'Назад'
+        secondaryButton.show()
+    
+        return {mainButton, secondaryButton}
+    }
 }
