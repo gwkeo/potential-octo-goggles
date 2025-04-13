@@ -16,7 +16,7 @@ type Validator interface {
 }
 
 type Adder interface {
-	Add(ctx context.Context, assignment *models.Assignment) (int64, error)
+	Add(ctx context.Context, assignment *models.Assignment, validationResult *models.ValidationResult) (int64, error)
 }
 
 type AssignmentReader interface {
@@ -58,7 +58,7 @@ func (c *AssignmentsController) HandlePost(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
-	id, err := c.adder.Add(ctx, a)
+	id, err := c.adder.Add(ctx, a, validationResult)
 	if err != nil {
 		http.Error(w, message.Wrap("error adding assignment to db", err), http.StatusInternalServerError)
 		return

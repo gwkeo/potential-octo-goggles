@@ -2,8 +2,10 @@ package postgres
 
 import (
 	"context"
+	"database/sql"
 	"errors"
 	"github.com/gwkeo/potential-octo-goggles/app/internal/models"
+	"github.com/gwkeo/potential-octo-goggles/app/internal/storage/assignments"
 	"github.com/jackc/pgx/v5"
 )
 
@@ -41,7 +43,7 @@ func (s *Storage) Create(ctx context.Context, assignments *models.Assignment) (i
 }
 
 func (s *Storage) UserAssignments(ctx context.Context, userID int64) ([]models.Assignment, error) {
-	rows, err := s.db.Query(ctx, "SELECT * FROM assignments WHERE user_id = $1  ORDER BY time_end", userID)
+	rows, err := s.db.Query(ctx, "SELECT * FROM assignments WHERE user_id = $1", userID)
 	if err != nil {
 		return nil, err
 	}
@@ -59,4 +61,23 @@ func (s *Storage) UserAssignments(ctx context.Context, userID int64) ([]models.A
 	}
 
 	return result, nil
+}
+
+func (s *Storage) AssignmentByFormula(ctx context.Context, userID int64, formula string) (*models.Assignment, error) {
+	var a models.Assignment
+	err := s.db.QueryRow(ctx, "SELECT * FROM assignments WHERE user_id = $1 AND formula = $2", userID, formula).Scan(&a.ID, &a.UserID, &a.Formula, &a.Grade, &a.Attempts, &a.TimeStart, &a.TimeEnd)
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return nil, assignments.AssignmentNotFound
+		}
+		return nil, err
+	}
+
+	return &a, nil
+}
+
+func (s *Storage) Update(ctx context.Context, assignment *models.Assignment) error {
+	rows, err := s.db.Query(ctx, "UPDATE assignments SET attempts = $1, grade = $2 WHERE id = $3", assignment.Attempts, assignment.Grade, assignment.ID)
+	defer rows.Close()
+	return err
 }

@@ -149,4 +149,12 @@ export const curves = [
     "Парабола",
     "Гипербола",
     "Мнимый эллипс",
+    "Точка",
+    "Параллельные прямые",
+    "Пересекающиеся прямые"
+].sort()
+
+export const buttonActivationTypes = [
+    "click",
+    "touchstart"
 ]

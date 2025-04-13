@@ -1,5 +1,6 @@
 services:
   nginx:
+    container_name: nginx
     image: nginx:alpine
     volumes:
       - ./nginx/default.conf:/etc/nginx/conf.d/nginx.conf
@@ -21,6 +22,7 @@ services:
     command: certonly --webroot -w /var/www/certbot --force-renewal --email rahman.i@mail.ru -d potential-octo-goggles.ru --agree-tos
 
   postgres:
+    container_name: postgres
     image: postgres:latest
     restart: always
     env_file:
@@ -40,6 +42,7 @@ services:
       timeout: 3s
 
   math:
+    container_name: math
     build:
       context: ./math
     command: uvicorn main:app --host 0.0.0.0 --port 8000
@@ -47,6 +50,7 @@ services:
       - "8000"
 
   app:
+    container_name: app
     build:
       context: ./app
       dockerfile: Dockerfile
