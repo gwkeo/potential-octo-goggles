@@ -13,7 +13,6 @@ def tex_to_py(stand_solution: Solution):
         stand_solution.formula = conv(stand_solution.formula)
         if stand_solution.formula.count('Eq') == 1:
             stand_solution.formula = stand_solution.formula[3:-1].replace(",", "=").replace(" ", "").replace("**", "^")
-        if stand_solution.name == "Гипербола":
             stand_solution.formula = stand_solution.formula.replace("1*", "")
     stand_solution.eccenter = conv(stand_solution.eccenter)
     stand_solution.parameter = conv(stand_solution.parameter)
