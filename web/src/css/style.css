@@ -87,6 +87,8 @@ input {
     border: none;
     border-bottom: solid 1px var(--default-dark-color);
     border-radius: 0;
+    background-color: var(--default-secondary-light-color);
+    color: var(--default-secondary-dark-color);
 }
 
 textarea:focus, input:focus {
@@ -121,6 +123,8 @@ select {
     font-size: large;
     border: none;
     border-radius: 0;
+    background-color: var(--default-light-color);
+    color: var(--default-secondary-dark-color);
 }
 
 select:focus {
