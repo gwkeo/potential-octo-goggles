@@ -26,6 +26,7 @@ jobs:
 
             echo "Updating repo"
             cd /home/${{secrets.SSH_USER}}/project
+            git stash
             git pull origin main
 
             echo "Building static files"
