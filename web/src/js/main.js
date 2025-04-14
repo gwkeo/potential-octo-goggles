@@ -6,6 +6,16 @@ import { BASE_ROUTE, FORM_ROUTE } from "./routes"
 
 document.addEventListener('DOMContentLoaded', async () => {
     updateNavbarHeight()
+    const tg = window?.Telegram?.WebApp
+
+    if (tg && tg?.themeParams) {
+        applyTheme(tg.themeParams);
+    }
+    
+    tg?.onEvent('themeChanged', () => {
+        applyTheme(tg.themeParams);
+    });
+    
     if (document.querySelector('.tg-info')) {
         await initMainPage()
     } else if (document.querySelector('.form')) {
@@ -20,16 +30,6 @@ function updateNavbarHeight() {
 }
 
 async function initMainPage() {
-
-    const tg = window?.Telegram?.WebApp
-
-    if (tg && tg?.themeParams) {
-        applyTheme(tg.themeParams);
-    }
-    
-    tg?.onEvent('themeChanged', () => {
-        applyTheme(tg.themeParams);
-    });
 
     const userData = getUserData()
     renderTelegram(userData)
@@ -108,29 +108,29 @@ async function initFormPage() {
 
 async function handleSubmit(task, time_start, time_end) {
     const solution = {
-        name: document.querySelector('select.name').value || "0",
+        name: document.querySelector('select.name').value || "",
         task: task.task,
-        formula: document.querySelector('.form-input#formula').value || "0",
+        formula: document.querySelector('.form-input#formula').value || "",
         focus1: {
-          x: document.querySelector('input#focus1_x').value || "0",
-          y: document.querySelector('input#focus1_y').value || "0"
+          x: document.querySelector('input#focus1_x').value || "",
+          y: document.querySelector('input#focus1_y').value || ""
         },
         focus2: {
-          x: document.querySelector('input#focus2_x').value || "0",
-          y: document.querySelector('input#focus2_y').value || "0"
+          x: document.querySelector('input#focus2_x').value || "",
+          y: document.querySelector('input#focus2_y').value || ""
         },
         center: {
-          x: document.querySelector('input#center_x').value || "0",
-          y: document.querySelector('input#center_y').value || "0"
+          x: document.querySelector('input#center_x').value || "",
+          y: document.querySelector('input#center_y').value || ""
         },
-        eccenter: document.querySelector('input#eccenter').value || "0",
-        parameter: document.querySelector('input#parameter').value || "0",
-        direct1: document.querySelector('input#direct1').value || "0",
-        direct2: document.querySelector('input#direct2').value || "0",
-        semiaxis_a: document.querySelector('input#semiaxis_a').value || "0",
-        semiaxis_b: document.querySelector('input#semiaxis_b').value || "0",
-        asymptote1: document.querySelector('input#asymptote1').value || "0",
-        asymptote2: document.querySelector('input#asymptote2').value || "0"
+        eccenter: document.querySelector('input#eccenter').value || "",
+        parameter: document.querySelector('input#parameter').value || "",
+        direct1: document.querySelector('input#direct1').value || "",
+        direct2: document.querySelector('input#direct2').value || "",
+        semiaxis_a: document.querySelector('input#semiaxis_a').value || "",
+        semiaxis_b: document.querySelector('input#semiaxis_b').value || "",
+        asymptote1: document.querySelector('input#asymptote1').value || "",
+        asymptote2: document.querySelector('input#asymptote2').value || ""
       }
       
     let userData = getUserData()
