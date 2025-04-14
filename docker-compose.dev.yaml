@@ -45,13 +45,24 @@ services:
       dockerfile: Dockerfile
     env_file: .env
     environment:
-      CONNECTION_STRING: "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:5432/${POSTGRES_DB}"
+      CONNECTION_STRING: "postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:5432/${POSTGRES_DB}"
       MATH_SERVICE_URL: "http://math:8000"
     expose:
       - "8080"
     depends_on:
-      - postgres
+      - migrate
       - math
+
+  migrate:
+    container_name: migrate
+    build: 
+      context: ./app
+      dockerfile: Dockerfile.migrate
+    env_file: .env
+    environment:
+      CONNECTION_STRING: "postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:5432/${POSTGRES_DB}"
+    depends_on:
+      - postgres
 
 volumes:
   pg_data:
