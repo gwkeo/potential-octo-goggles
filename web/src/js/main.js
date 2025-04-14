@@ -6,27 +6,6 @@ import { BASE_ROUTE, FORM_ROUTE } from "./routes"
 
 document.addEventListener('DOMContentLoaded', async () => {
     updateNavbarHeight()
-
-    const tg = window?.Telegram?.WebApp
-
-    function applyTheme(themeParams) {
-        const root = document.documentElement;
-    
-        root.style.setProperty('--default-light-color', themeParams.bg_color || '#f8f8f8');
-        root.style.setProperty('--default-dark-color', themeParams.text_color || '#1f1f1f');
-        root.style.setProperty('--default-secondary-light-color', themeParams.secondary_bg_color || '#f6fafd');
-        root.style.setProperty('--default-secondary-dark-color', themeParams.hint_color || '#313131');
-        root.style.setProperty('--default-blue', themeParams.button_color || '#0084ff');
-    }
-    
-    if (tg && tg.themeParams) {
-        applyTheme(tg.themeParams);
-    }
-    
-    tg?.onEvent('themeChanged', () => {
-        applyTheme(tg.themeParams);
-    });
-
     if (document.querySelector('.tg-info')) {
         await initMainPage()
     } else if (document.querySelector('.form')) {
@@ -35,16 +14,23 @@ document.addEventListener('DOMContentLoaded', async () => {
 })
 
 function updateNavbarHeight() {
-    try {
-        const navbar = document.querySelector('.nav');
-        const height = navbar.offsetHeight;
-        document.documentElement.style.setProperty('--nav-height', `${height + 10}px`);
-    } catch (e) {
-        console.error(e)
-    }
+    const navbar = document.querySelector('.nav');
+    const height = navbar.offsetHeight;
+    document.documentElement.style.setProperty('--nav-height', `${height + 10}px`);
 }
 
 async function initMainPage() {
+
+    const tg = window?.Telegram?.WebApp
+
+    if (tg && tg?.themeParams) {
+        applyTheme(tg.themeParams);
+    }
+    
+    tg?.onEvent('themeChanged', () => {
+        applyTheme(tg.themeParams);
+    });
+
     const userData = getUserData()
     renderTelegram(userData)
 
@@ -52,15 +38,31 @@ async function initMainPage() {
     renderAssignments(assignments)
 
     let mainButton = setProfileMenuButton()
-    mainButton.onClick(() => {
-        window.location.href = FORM_ROUTE
-    })
+    if (mainButton) {
+        mainButton.onClick(() => {
+            window.location.href = FORM_ROUTE
+        })
+    } else {
+        alert("main button not laoded")
+    }
+}
+
+function applyTheme(themeParams) {
+    const root = document.documentElement;
+
+    root.style.setProperty('--default-light-color', themeParams.bg_color || '#f8f8f8');
+    root.style.setProperty('--default-dark-color', themeParams.text_color || '#1f1f1f');
+    root.style.setProperty('--default-secondary-light-color', themeParams.secondary_bg_color || '#f6fafd');
+    root.style.setProperty('--default-secondary-dark-color', themeParams.hint_color || '#313131');
+    root.style.setProperty('--default-blue', themeParams.button_color || '#0084ff');
 }
 
 async function initFormPage() {
     
     let task = await getTask()
-    renderTask(task)
+    if (task) {
+        renderTask(task)
+    }
 
     const time_start = new Date().toISOString()
     
@@ -74,6 +76,9 @@ async function initFormPage() {
     })
     
     let {mainButton, secondaryButton} = setTestingMenuButtons()
+    if (!mainButton && !secondaryButton) {
+        alert("Telegram buttons not laoded")
+    }
 
     secondaryButton.onClick(() => {
         window.location.href = BASE_ROUTE
@@ -81,7 +86,11 @@ async function initFormPage() {
     
     mainButton.onClick(async () => {
         const time_end = new Date().toISOString()
-        await handleSubmit(task, time_start, time_end)
+        try {
+            await handleSubmit(task, time_start, time_end)
+        } catch (e) {
+            alert("Ошибка во время отправки формы: ", err)
+        }
     })
 
     buttonActivationTypes.forEach( (type) => {
@@ -137,7 +146,7 @@ async function handleSubmit(task, time_start, time_end) {
     let response = await sendSolution(formData)
     console.log(response.Message)
     if (!response.OK) {
-        alert(response.msg)
+        alert(response.Message)
     } else {
         alert(response.Message)
     }
@@ -147,18 +156,6 @@ function renderHelpMessage() {
     document.querySelector('.overlay').classList.add('show')
     document.querySelector('.modal-title').innerText = 'Помощь'
     document.querySelector('.modal-content').innerHTML = '<div>Здесь будет help message</div>'
-}
-
-function renderSuccess(msg) {
-    document.querySelector('.overlay').classList.add('show')
-    document.querySelector('.modal-content').innerText = 'Задание выполнено верно, ответ засчитан\n' + msg
-    document.querySelector('.modal-title').innerText = 'Успех'
-}
-
-function renderError(msg) {
-    document.querySelector('.overlay').classList.add('show')
-    document.querySelector('.modal-content').innerText = msg
-    document.querySelector('.modal-title').innerText = 'Ошибка'
 }
 
 function renderTaskInputs() {
@@ -239,11 +236,15 @@ function renderTex(key, value) {
 
 function renderTelegram(data) {
     const tgInfo = document.querySelector('.tg-info')
-    tgInfo.innerHTML = 
-    `<div class="profile-info">
-        <img src="${data.photo_url}" alt="">
-        <div class="name">${data.first_name}</div>
-    </div>`
+    if (data) {
+        tgInfo.innerHTML = 
+        `<div class="profile-info">
+            <img src="${data.photo_url}" alt="">
+            <div class="name">${data.first_name}</div>
+        </div>`
+    } else {
+        tgInfo.innerHTML = '<div class="profile-info">Загрузка</div>'
+    }
 }
 
 function renderAssignments(data) {

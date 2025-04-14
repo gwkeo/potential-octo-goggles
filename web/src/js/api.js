@@ -2,7 +2,7 @@ export async function getUsersAssignments(user_id) {
     try {
         const response = await fetch(`/api/assignments/?user_id=${user_id}`, {
             headers: {
-            'Accept': 'application/json' // Явно указываем ожидаемый формат
+            'Accept': 'application/json'
             }
         });
     
@@ -15,7 +15,7 @@ export async function getUsersAssignments(user_id) {
       
     } catch (error) {
         console.error('Error fetching assignments:', error);
-        return `error fetching assignments: ${error}`;
+        return null;
     }
 }
 
@@ -24,8 +24,7 @@ export async function getTask() {
         const response = await fetch(`/api/math/task`)
         return await response.json()
     } catch (e) {
-        console.error(e)
-        return `error: ${e}`
+        return null
     }
 }
 
