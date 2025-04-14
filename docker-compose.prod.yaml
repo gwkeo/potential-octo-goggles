@@ -17,9 +17,9 @@ services:
     image: certbot/certbot
     container_name: certbot
     volumes:
-      - ./certbot/conf:/etc/lestencrypt
+      - ./certbot/conf:/etc/letsencrypt
       - ./certbot/www:/var/www/certbot
-    command: certonly --webroot -w /var/www/certbot --force-renewal --email rahman.i@mail.ru -d potential-octo-goggles.ru --agree-tos
+    command: renew --webroot -w /var/www/certbot
 
   postgres:
     container_name: postgres
@@ -63,6 +63,16 @@ services:
     depends_on:
       - postgres
       - math
+  migrate:
+    container_name: migrate
+    build: 
+      context: ./app
+      dockerfile: Dockerfile.migrate
+    env_file: .env
+    environment:
+      CONNECTION_STRING: "postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:5432/${POSTGRES_DB}"
+    depends_on:
+      - postgres
 
 volumes:
   pg_data:
