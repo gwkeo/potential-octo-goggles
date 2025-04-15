@@ -155,7 +155,15 @@ async function handleSubmit(task, time_start, time_end) {
 function renderHelpMessage() {
     document.querySelector('.overlay').classList.add('show')
     document.querySelector('.modal-title').innerText = 'Помощь'
-    document.querySelector('.modal-content').innerHTML = '<div>Здесь будет help message</div>'
+    document.querySelector('.modal-content').innerHTML = `<div>
+        <p>Система принимает дроби и корни в следующем ТеХ формате:</p>
+        <p>\\frac{}{} для дробей</p>
+        <p>\\sqrt{} для корней</p>
+        <p>Для отсутствующего параметра соответстующее поле должно быть пустым</p>
+        <p>Каноническое уравнение для вырожденных случаев: два уравнения прямой через запятую.</p>
+        <p>Правая часть канонического уравнения для сопряжённой гиперболы: -1. </p>
+        <p>Для директрис ОБЯЗАТЕЛЬНО указывать ось: x=значение; y=значение.</p>
+    </div>`
 }
 
 function renderTaskInputs() {

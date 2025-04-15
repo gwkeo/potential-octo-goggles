@@ -89,6 +89,7 @@ input {
     border-radius: 0;
     background-color: var(--default-secondary-light-color);
     color: var(--default-secondary-dark-color);
+    font-size: large;
 }
 
 textarea:focus, input:focus {
@@ -114,6 +115,7 @@ textarea:focus, input:focus {
 }
 
 .modal {
+    margin: 20px;
     background-color: var(--default-light-color);
     border-radius: 10px;
     padding: 10px;
